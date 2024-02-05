@@ -1,0 +1,56 @@
+.pacman-background {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    z-index: -1;
+    position: absolute;
+    border-bottom: 0.5vw solid #490eab;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+    gap: 0;
+}
+
+.subcomponent {
+    box-sizing: border-box;
+    box-shadow: 0 0 0.5vw #b06500;
+    position: relative;
+    width: 4vw;
+    height: 4vw;
+    background-color: black;
+    z-index: -1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.subcomponent.with-dot {
+    justify-content: center;
+    align-items: center;
+}
+
+.dot {
+    width: 0.66vw;
+    height: 0.66vw;
+    background-color: #FCFC03;
+    border-radius: 50%;
+    box-shadow: 0 0 0.5vw yellow;
+}
+
+.subcomponent.has-top-wall {
+    border-top: 0.5vw solid #490eab;
+}
+
+.subcomponent.has-bottom-wall {
+    border-bottom: 0.5vw solid #490eab;
+}
+
+.subcomponent.has-left-wall {
+    border-left: 0.5vw solid #490eab;
+}
+
+.subcomponent.has-right-wall {
+    border-right: 0.5vw solid #490eab;
+}
