@@ -29,7 +29,7 @@ const FungibleFlip = () => {
 
     const [leaderboardText, setLeaderboardText] = useState<string>("leaderboard");
 
-    const provider = new ethers.JsonRpcProvider('https://sepolia.blast.io');
+    const provider = new ethers.JsonRpcProvider('https://rpc.ankr.com/blast_testnet_sepolia/647924a9aa98249697add40f8edd819ae04c3e97ef701d2e425617aff280850f');
 
     const contractAddress = "0x85c76C78713690C4563959bfc89c82D1CA5aF7d4";
 
