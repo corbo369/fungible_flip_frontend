@@ -4,6 +4,8 @@ import axios from 'axios';
 import flipABI from '../assets/FungibleFlip.json';
 import Heads from '../assets/images/heads.png';
 import Tails from '../assets/images/tails.png';
+import HeadsAnimation from '../assets/images/heads-animation.png';
+import TailsAnimation from '../assets/images/tails-animation.png';
 import './styles/fungibleFlip.css';
 
 function isMetaMaskInstalled() {
@@ -336,19 +338,19 @@ const FungibleFlip = () => {
                         {(flipResult === 0) ? (
                             <div id="coin" className="coin-result">
                                 <div className="face front">
-                                    <img className="front-img" src={Tails} alt="Tails"/>
+                                    <img className="front-img" src={TailsAnimation} alt="Tails"/>
                                 </div>
                                 <div className="face back">
-                                    <img className="back-img" src={Tails} alt="Tails"/>
+                                    <img className="back-img" src={TailsAnimation} alt="Tails"/>
                                 </div>
                             </div>
                         ) : (
                             <div id="coin" className="coin-result">
                                 <div className="face front">
-                                    <img className="front-img" src={Heads} alt="Heads" />
+                                    <img className="front-img" src={HeadsAnimation} alt="Heads" />
                                 </div>
                                 <div className="face back">
-                                    <img className="back-img" src={Heads} alt="Heads" />
+                                    <img className="back-img" src={HeadsAnimation} alt="Heads" />
                                 </div>
                             </div>
                         )}
