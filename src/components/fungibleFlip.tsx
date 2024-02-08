@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import {ethers} from "ethers";
+import Alert from './alert';
 import axios from 'axios';
 import flipABI from '../assets/FungibleFlip.json';
 import Heads from '../assets/images/heads.png';
@@ -7,11 +8,6 @@ import Tails from '../assets/images/tails.png';
 import HeadsAnimation from '../assets/images/heads-animation.png';
 import TailsAnimation from '../assets/images/tails-animation.png';
 import './styles/fungibleFlip.css';
-
-function isMetaMaskInstalled() {
-    // @ts-ignore
-    return Boolean(window.ethereum && window.ethereum.isMetaMask);
-}
 
 const FungibleFlip = () => {
 
@@ -29,7 +25,11 @@ const FungibleFlip = () => {
 
     const [userAddress, setUserAddress] = useState<string>("");
 
+    const [showChainAlert, setShowChainAlert] = useState(false);
+
     const [leaderboardText, setLeaderboardText] = useState<string>("leaderboard");
+
+    const chainID = 168587773;
 
     const provider = new ethers.JsonRpcProvider('https://rpc.ankr.com/blast_testnet_sepolia/647924a9aa98249697add40f8edd819ae04c3e97ef701d2e425617aff280850f');
 
@@ -89,20 +89,13 @@ const FungibleFlip = () => {
         }
     };
 
+    const handleAlertClose = () => {
+        setShowChainAlert(false);
+    };
+
     async function connectWallet() {
-        if (isMetaMaskInstalled()) {
-            // @ts-ignore
-            window.ethereum
-                .request({
-                    method: 'wallet_switchEthereumChain',
-                    params: [{ chainId: '0x168587773' }],
-                })
-                .then((result: any) => {
-                    console.log(result);
-                })
-                .catch((error: any) => {
-                    console.error(error);
-                });
+        // @ts-ignore
+        if (window.ethereum && window.ethereum.isMetaMask) {
             try {
                 // @ts-ignore
                 const accounts = await window.ethereum.request({
@@ -179,6 +172,12 @@ const FungibleFlip = () => {
                 flipABI.abi,
                 signer
             );
+            const network = await provider.getNetwork();
+            if (Number(network.chainId) !== chainID) {
+                setShowChainAlert(true);
+                setStage(0);
+                return;
+            }
             try {
                 const randomNumber = ethers.randomBytes(32);
                 const commitment = ethers.keccak256(randomNumber);
@@ -238,6 +237,12 @@ const FungibleFlip = () => {
                     flipABI.abi,
                     signer
                 );
+                const network = await provider.getNetwork();
+                if (Number(network.chainId) !== chainID) {
+                    setShowChainAlert(true);
+                    setStage(2);
+                    return;
+                }
                 const sequence = await contract.sequenceNumbers(userAddress);
                 const sequenceNumber = Number(sequence);
                 const response = await axios.get('https://fungible-flip-aea2a3335ad7.herokuapp.com/api/getRevelation', {
@@ -332,6 +337,9 @@ const FungibleFlip = () => {
                     Level {level}
                 </div>
             </div>
+            {showChainAlert && (
+                <Alert message="Please switch to the Blast Sepolia network" type="error" onClose={handleAlertClose} />
+            )}
             {stage === 4 ? (
                 <div className="main">
                     <div className="coin-container">

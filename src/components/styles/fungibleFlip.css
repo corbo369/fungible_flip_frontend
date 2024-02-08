@@ -263,3 +263,48 @@
     object-fit: contain;
 }
 
+.alert {
+    position: absolute;
+    overflow: hidden;
+    top: 34vw;
+    left: 40vw;
+    z-index: 9999;
+    height: 4vw;
+    width: 20vw;
+    font-family: PressStart2P, serif;
+    font-size: 0.9vw;
+    color: white;
+    text-shadow: .18vh .18vh black;
+    background-color: #490eab;
+    border: solid .33vh black;
+    opacity: 100%;
+}
+
+.progress-bar {
+    height: .45vw;
+    background-color: #721c24;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.alert-info {
+    background-color: #d1ecf1;
+    color: #0c5460;
+}
+
+.alert-warning {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.alert-error {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
