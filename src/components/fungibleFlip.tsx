@@ -288,11 +288,12 @@ const FungibleFlip = () => {
 
                 setFlipResult(Number(event.args[2]));
 
-                setStage(4);
                 // @ts-ignore
                 document.getElementById("coin").style.animationIterationCount = 1;
                 // @ts-ignore
                 document.getElementById("coin").style.animationPlayState = "paused";
+
+                setStage(4);
 
                 contract.off(eventFilter);
             });
