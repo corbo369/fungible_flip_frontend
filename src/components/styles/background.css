@@ -26,7 +26,7 @@
     align-items: center;
 }
 
-.subcomponent.with-dot {
+.subcomponent.with-item {
     justify-content: center;
     align-items: center;
 }
@@ -37,6 +37,41 @@
     background-color: #FCFC03;
     border-radius: 50%;
     box-shadow: 0 0 0.5vw yellow;
+}
+
+.powerup {
+    width: 2.1vw;
+    height: 2.1vw;
+    background-color: #FCFC03;
+    border-radius: 50%;
+    box-shadow: .1vw 0 1vw #ff9100;
+    animation: glow 1.2s infinite alternate;
+}
+
+@keyframes glow {
+    from {
+        box-shadow: 0 0 0.33vw #ff9100;
+    }
+    to {
+        box-shadow: 0 0 0.9vw yellow;
+    }
+}
+
+.cherry {
+    width: 2.7vw;
+    height: 2.7vw;
+    animation: grow 0.9s infinite alternate;
+}
+
+@keyframes grow {
+    from {
+        width: 2.7vw;
+        height: 2.7vw;
+    }
+    to {
+        width: 2.8vw;
+        height: 2.8vw;
+    }
 }
 
 .subcomponent.has-top-wall {
