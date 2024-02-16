@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {ethers} from "ethers";
 import Alert from './alert';
+import { Howl } from 'howler';
 import axios from 'axios';
 import flipABI from '../assets/FungibleFlip.json';
 import Heads from '../assets/images/heads.png';
@@ -8,6 +9,46 @@ import Tails from '../assets/images/tails.png';
 import HeadsAnimation from '../assets/images/heads-animation.png';
 import TailsAnimation from '../assets/images/tails-animation.png';
 import './styles/fungibleFlip.css';
+
+function playSound(name: string) {
+    const soundMap = {
+        'deposit': () => new Howl({
+            src: [`${process.env.PUBLIC_URL}/audio/deposit.wav`],
+            volume: 1,
+            autoplay: false,
+            preload: true,
+        }),
+        'background': () => new Howl({
+            src: [`${process.env.PUBLIC_URL}/audio/background.wav`],
+            volume: 0.24,
+            autoplay: false,
+            preload: true,
+            loop: true,
+        }),
+        'flip': () => new Howl({
+            src: [`${process.env.PUBLIC_URL}/audio/flip.wav`],
+            volume: 1,
+            autoplay: false,
+            preload: true,
+        }),
+        'win': () => new Howl({
+            src: [`${process.env.PUBLIC_URL}/audio/winner.wav`],
+            volume: 1,
+            autoplay: false,
+            preload: true,
+        }),
+        'lose': () => new Howl({
+            src: [`${process.env.PUBLIC_URL}/audio/loser.wav`],
+            volume: 1,
+            autoplay: false,
+            preload: true,
+        }),
+    };
+    // @ts-ignore
+    const sound = soundMap[name]();
+    sound.play();
+    return sound;
+}
 
 const FungibleFlip = () => {
 
@@ -26,6 +67,8 @@ const FungibleFlip = () => {
     const [userAddress, setUserAddress] = useState<string>("");
 
     const [showChainAlert, setShowChainAlert] = useState(false);
+
+    const [soundObj, setSoundObj] = useState(null);
 
     const [leaderboardText, setLeaderboardText] = useState<string>("leaderboard");
 
@@ -182,6 +225,8 @@ const FungibleFlip = () => {
                 const randomNumber = ethers.randomBytes(32);
                 const commitment = ethers.keccak256(randomNumber);
                 const result = await contract.deposit(randomNumber, commitment, choice, {value: ethers.parseEther(String(amount))});
+                playSound('deposit');
+                setSoundObj(playSound('background'));
                 await handleSubscribeDeposit();
                 console.log(result);
             } catch (err) {
@@ -271,17 +316,16 @@ const FungibleFlip = () => {
         const eventFilter = contract.filters.Result(userAddress, null, null, null);
 
         try {
+            // @ts-ignore
+            document.getElementById("coin").style.animationName = "flipping";
+            // @ts-ignore
+            document.getElementById("coin").style.animationTimingFunction = "linear";
+            // @ts-ignore
+            document.getElementById("coin").style.animationIterationCount = "infinite";
+            // @ts-ignore
+            document.getElementById("coin").style.animationPlayState = "running";
 
-            setTimeout(() => {
-                // @ts-ignore
-                document.getElementById("coin").style.animationName = "flipping";
-                // @ts-ignore
-                document.getElementById("coin").style.animationTimingFunction = "linear";
-                // @ts-ignore
-                document.getElementById("coin").style.animationIterationCount = "infinite";
-                // @ts-ignore
-                document.getElementById("coin").style.animationPlayState = "running";
-            }, 300);
+            playSound('flip');
 
             await contract.on(eventFilter, (event) => {
                 console.log('Event data:', event);
@@ -293,7 +337,17 @@ const FungibleFlip = () => {
                 // @ts-ignore
                 document.getElementById("coin").style.animationPlayState = "paused";
 
+                // @ts-ignore
+                soundObj.stop();
+                setSoundObj(null);
+
                 setStage(4);
+
+                if (flipResult === choice) {
+                    playSound('win');
+                } else {
+                    playSound('lose');
+                }
 
                 contract.off(eventFilter);
             });

@@ -13,6 +13,7 @@
     "axios": "^1.6.5",
     "ethers": "^6.8.1",
     "express": "^4.18.2",
+    "howler": "^2.2.4",
     "isomorphic-fetch": "^3.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -44,5 +45,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/howler": "^2.2.11"
   }
 }
