@@ -1,0 +1,259 @@
+@font-face {
+    font-family: 'PressStart2P';
+    src: url(../../assets/fonts/PressStart2P-Regular.ttf);
+}
+
+@font-face {
+    font-family: 'ArcadeClassic';
+    src: url(../../assets/fonts/ArcadeClassic.ttf);
+}
+
+.flip {
+    color: white;
+}
+
+.titleM {
+    text-align: center;
+    font-size: 5.4vh;
+    font-family: PressStart2P, serif;
+    text-shadow:
+            0.24vw 0.24vw 0.24vw #693c8d,
+            -0.15vw 0.15vw 0.24vw #FCFC03;
+    color: whitesmoke;
+    margin-bottom: -2vh;
+}
+
+.levelbar-containerM {
+    display: flex;
+    align-items: center;
+}
+
+.levelM {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: ArcadeClassic, serif;
+    font-size: 3.6vh;
+    text-shadow: .18vh .18vh purple;
+    margin-bottom: 3vh;
+}
+
+.levelbarM {
+    width: 30vw;
+    height: 3.6vw;
+    margin-top: 1vh;
+    background: #eee;
+    border-radius: 2px;
+    box-shadow: 0 0 0.45vw purple;
+    overflow: hidden;
+}
+
+.experienceM {
+    height: 100%;
+    background: #43f535;
+    border-radius: 4px;
+    transition: width 0.5s;
+}
+
+.mainM {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.choicesM {
+    display: flex;
+    flex-direction: row;
+}
+
+.choice-btnM {
+    height: 6vh;
+    width: 28vh;
+    font-family: ArcadeClassic, serif;
+    font-size: 4.8vh;
+    color: white;
+    text-shadow: .18vh .18vh black;
+    background-color: #490eab;
+    border: solid .33vh black;
+    opacity: 100%;
+}
+
+.choice-btn-selectedM {
+    border: solid .33vh black;
+    opacity: 75%;
+}
+
+.amountsM {
+    display: flex;
+    flex-direction: row;
+}
+
+.amount-btnM {
+    height: 5vh;
+    width: 18.666666vh;
+    font-family: ArcadeClassic, serif;
+    font-size: 3vh;
+    color: white;
+    text-shadow: .18vh .18vh black;
+    background-color: #490eab;
+    border: solid .33vh black;
+    opacity: 100%;
+}
+
+.amount-btn-selectedM {
+    border: solid .33vh black;
+    opacity: 75%;
+}
+
+.flip-infoM {
+    height: 16vh;
+    width: 56vh;
+    font-family: ArcadeClassic, serif;
+    font-size: 6.6vh;
+    color: white;
+    text-shadow: .18vh .18vh black;
+    background-color: #490eab;
+    border: solid .33vh black;
+    opacity: 75%;
+}
+
+.flip-btnM {
+    height: 8vh;
+    width: 56vh;
+    font-family: ArcadeClassic, serif;
+    font-size: 4.8vh;
+    color: white;
+    text-shadow: .18vh .18vh black;
+    background-color: #490eab;
+    border: solid .33vh black;
+    opacity: 100%;
+}
+
+.result-txtM {
+    height: 8vw;
+    width: 28vw;
+    font-family: ArcadeClassic, serif;
+    font-size: 2.4vw;
+    color: white;
+    text-shadow: .18vh .18vh black;
+    background-color: #490eab;
+    border: solid .33vh black;
+    opacity: 75%;
+}
+
+.result-btnM {
+    height: 4vw;
+    width: 28vw;
+    font-family: ArcadeClassic, serif;
+    font-size: 2.8vw;
+    color: white;
+    text-shadow: .18vh .18vh black;
+    background-color: #490eab;
+    border: solid .33vh black;
+    opacity: 100%;
+}
+
+.coin-containerM {
+    height: 48vh;
+}
+
+.coin-animatedM {
+    position: relative;
+    width: 48vh;
+    height: 48vh;
+    animation-name: spinningM;
+    animation-duration: 2.1s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+    animation-play-state: paused;
+    transform-style: preserve-3d;
+}
+
+.coin-resultM {
+    position: relative;
+    width: 24vw;
+    height: 24vw;
+}
+
+@keyframes spinningM {
+    from { transform: perspective(48vh) rotateY(0deg); }
+    to { transform: perspective(48vh) rotateY(360deg); }
+}
+
+@keyframes flippingM {
+    from { transform: perspective(66vh) rotateX(0deg); }
+    to { transform: perspective(66vh) rotateX(-1080deg); }
+}
+
+.face {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+}
+
+.front {
+    z-index: 2;
+    transform: rotateY(0deg);
+}
+
+.back {
+    z-index: 1;
+    transform: rotateY(180deg);
+}
+
+.front-img,
+.back-img {
+    height: 100%;
+    width: 100%;
+    object-fit: contain;
+}
+
+.alertM {
+    position: absolute;
+    overflow: hidden;
+    top: 34vw;
+    left: 40vw;
+    z-index: 9999;
+    height: 4vw;
+    width: 20vw;
+    font-family: PressStart2P, serif;
+    font-size: 0.9vw;
+    color: white;
+    text-shadow: .18vh .18vh black;
+    background-color: #490eab;
+    border: solid .33vh black;
+    opacity: 100%;
+}
+
+.progress-bar {
+    height: .45vw;
+    background-color: #721c24;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.alert-info {
+    background-color: #d1ecf1;
+    color: #0c5460;
+}
+
+.alert-warning {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.alert-error {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
