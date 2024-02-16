@@ -343,7 +343,7 @@ const FungibleFlip = () => {
 
                 setStage(4);
 
-                if (flipResult === choice) {
+                if (Number(event.args[2]) === choice) {
                     playSound('win');
                 } else {
                     playSound('lose');
