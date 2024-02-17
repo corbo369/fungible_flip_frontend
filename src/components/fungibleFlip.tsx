@@ -20,7 +20,7 @@ function playSound(name: string) {
         }),
         'background': () => new Howl({
             src: [`${process.env.PUBLIC_URL}/audio/background.wav`],
-            volume: 0.24,
+            volume: 0.12,
             autoplay: false,
             preload: true,
             loop: true,
