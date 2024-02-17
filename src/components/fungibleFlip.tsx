@@ -256,12 +256,9 @@ const FungibleFlip = () => {
                     document.getElementById("coin").style.animationIterationCount = 1;
                     // @ts-ignore
                     document.getElementById("coin").style.animationPlayState = "paused";
-                }, 12000);
+                }, 9000);
                 contract.off(eventFilter);
             });
-            // @ts-ignore
-            soundObj.stop();
-            setSoundObj(null);
         } catch (error) {
             // @ts-ignore
             document.getElementById("coin").style.animationIterationCount = 1;
@@ -339,6 +336,10 @@ const FungibleFlip = () => {
                 document.getElementById("coin").style.animationIterationCount = 1;
                 // @ts-ignore
                 document.getElementById("coin").style.animationPlayState = "paused";
+
+                // @ts-ignore
+                soundObj.stop();
+                setSoundObj(null);
 
                 setStage(4);
 
