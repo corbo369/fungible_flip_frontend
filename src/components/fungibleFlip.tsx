@@ -387,7 +387,7 @@ const FungibleFlip = () => {
                 </div>
                 <p className="title">FUNGIBLE FLIP</p>
                 <div className="level-container">
-                    <a href="https://twitter.com/FungibleFlip" target="_blank">
+                    <a href="https://twitter.com/FungibleFlip" target="_">
                         <button className="social-btn">
                             <img className="twitter" src={Twitter} alt="Twitter" />
                         </button>
