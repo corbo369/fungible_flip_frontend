@@ -4,6 +4,8 @@ import Alert from './alert';
 import { Howl } from 'howler';
 import axios from 'axios';
 import flipABI from '../assets/FungibleFlip.json';
+import Mute from '../assets/images/mute.png';
+import Twitter from '../assets/images/twitter.png';
 import Heads from '../assets/images/heads.png';
 import Tails from '../assets/images/tails.png';
 import HeadsAnimation from '../assets/images/heads-animation.png';
@@ -14,32 +16,32 @@ function playSound(name: string) {
     const soundMap = {
         'deposit': () => new Howl({
             src: [`${process.env.PUBLIC_URL}/audio/deposit.wav`],
-            volume: 1,
+            volume: .45,
             autoplay: false,
             preload: true,
         }),
         'background': () => new Howl({
             src: [`${process.env.PUBLIC_URL}/audio/background.wav`],
-            volume: 0.12,
+            volume: 0.24,
             autoplay: false,
             preload: true,
-            loop: true,
+            loop: false,
         }),
         'flip': () => new Howl({
             src: [`${process.env.PUBLIC_URL}/audio/flip.wav`],
-            volume: 1,
+            volume: .45,
             autoplay: false,
             preload: true,
         }),
         'win': () => new Howl({
             src: [`${process.env.PUBLIC_URL}/audio/winner.wav`],
-            volume: 1,
+            volume: .33,
             autoplay: false,
             preload: true,
         }),
         'lose': () => new Howl({
             src: [`${process.env.PUBLIC_URL}/audio/loser.wav`],
-            volume: 1,
+            volume: .33,
             autoplay: false,
             preload: true,
         }),
@@ -64,11 +66,11 @@ const FungibleFlip = () => {
 
     const [experience, setExperience] = useState<number>(0);
 
+    const [muted, setMuted] = useState<boolean>(false);
+
+    const [showChainAlert, setShowChainAlert] = useState<boolean>(false);
+
     const [userAddress, setUserAddress] = useState<string>("");
-
-    const [showChainAlert, setShowChainAlert] = useState(false);
-
-    const [soundObj, setSoundObj] = useState(null);
 
     const [leaderboardText, setLeaderboardText] = useState<string>("leaderboard");
 
@@ -225,8 +227,7 @@ const FungibleFlip = () => {
                 const randomNumber = ethers.randomBytes(32);
                 const commitment = ethers.keccak256(randomNumber);
                 const result = await contract.deposit(randomNumber, commitment, choice, {value: ethers.parseEther(String(amount))});
-                playSound('deposit');
-                setSoundObj(playSound('background'));
+                if(!muted) playSound('deposit');
                 await handleSubscribeDeposit();
                 console.log(result);
             } catch (err) {
@@ -252,11 +253,12 @@ const FungibleFlip = () => {
                 console.log('Event data:', event);
                 setTimeout(() => {
                     setStage(2);
+                    if(!muted) playSound('background');
                     // @ts-ignore
                     document.getElementById("coin").style.animationIterationCount = 1;
                     // @ts-ignore
                     document.getElementById("coin").style.animationPlayState = "paused";
-                }, 9000);
+                }, 12000);
                 contract.off(eventFilter);
             });
         } catch (error) {
@@ -325,7 +327,7 @@ const FungibleFlip = () => {
             // @ts-ignore
             document.getElementById("coin").style.animationPlayState = "running";
 
-            playSound('flip');
+            if(!muted) playSound('flip');
 
             await contract.on(eventFilter, (event) => {
                 console.log('Event data:', event);
@@ -337,16 +339,12 @@ const FungibleFlip = () => {
                 // @ts-ignore
                 document.getElementById("coin").style.animationPlayState = "paused";
 
-                // @ts-ignore
-                soundObj.stop();
-                setSoundObj(null);
-
                 setStage(4);
 
                 if (Number(event.args[2]) === choice) {
-                    playSound('win');
+                    if(!muted) playSound('win');
                 } else {
-                    playSound('lose');
+                    if(!muted) playSound('lose');
                 }
 
                 contract.off(eventFilter);
@@ -380,16 +378,27 @@ const FungibleFlip = () => {
                     >
                         {leaderboardText}
                     </button>
+                    <button
+                        className={`mute-btn ${muted ? "mute-btn-selected" : ""}`}
+                        onClick={() => setMuted(!muted)}
+                    >
+                        <img className="mute-img" src={Mute} alt="Mute"/>
+                    </button>
                 </div>
                 <p className="title">FUNGIBLE FLIP</p>
-                <div className="level">
-                    {userAddress.substring(0, 5) + "..." + userAddress.substring(40, 42)}
+                <div className="level-container">
+                    <a href="https://twitter.com/FungibleFlip" target="_blank">
+                        <button className="social-btn">
+                            <img className="twitter" src={Twitter} alt="Twitter" />
+                        </button>
+                    </a>
                     <div className="levelbar-container">
+                        {userAddress.substring(0, 5) + "..." + userAddress.substring(40, 42)}
                         <div className="levelbar">
                             <div className="experience" style={{width: `${(experience / 1000) * 100}%`}}/>
                         </div>
+                        Level {level}
                     </div>
-                    Level {level}
                 </div>
             </div>
             {showChainAlert && (
