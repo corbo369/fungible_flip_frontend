@@ -3,11 +3,12 @@ import {ethers} from "ethers";
 import Alert from './alert';
 import axios from 'axios';
 import flipABI from '../assets/FungibleFlip.json';
+import Twitter from '../assets/images/twitter.png';
 import Heads from '../assets/images/heads.png';
 import Tails from '../assets/images/tails.png';
 import HeadsAnimation from '../assets/images/heads-animation.png';
 import TailsAnimation from '../assets/images/tails-animation.png';
-import './styles/fungibleFlipMobile.css';
+import './styles/fungibleFlip.css';
 
 const FungibleFlipMobile = () => {
 
@@ -24,6 +25,8 @@ const FungibleFlipMobile = () => {
     const [experience, setExperience] = useState<number>(0);
 
     const [userAddress, setUserAddress] = useState<string>("");
+
+    const [leaderboardText, setLeaderboardText] = useState<string>("leaderboard");
 
     const [showChainAlert, setShowChainAlert] = useState(false);
 
@@ -315,15 +318,37 @@ const FungibleFlipMobile = () => {
 
     return (
         <div className="flip">
-            <p className="titleM">FUNGIBLE FLIP</p>
             {showChainAlert && (
                 <Alert message="Please switch to the Blast Sepolia network" type="error" onClose={handleAlertClose} />
             )}
+            <p className="title-mobile">FUNGIBLE FLIP</p>
+            <div className="middle-container-mobile">
+                <a href="https://twitter.com/FungibleFlip" target="_">
+                    <button className="social-btn-mobile">
+                        <img className="twitter-mobile" src={Twitter} alt="Twitter" />
+                    </button>
+                </a>
+                <button
+                    className="leaderboard-btn-mobile"
+                    onMouseEnter={() => setLeaderboardText("COMING SOON")}
+                    onMouseLeave={() => setLeaderboardText("LEADERBOARD")}
+                >
+                    {leaderboardText}
+                </button>
+                <div className="level-mobile">
+                    <div className="levelbar-container-mobile">
+                        <div className="levelbar-mobile">
+                            <div className="experience-mobile" style={{width: `${(experience / 1000) * 100}%`}}/>
+                        </div>
+                    </div>
+                    Level {level}
+                </div>
+            </div>
             {stage === 4 ? (
-                <div className="mainM">
-                    <div className="coin-containerM">
+                <div className="main-mobile">
+                    <div className="coin-container-mobile">
                         {(flipResult === 0) ? (
-                            <div id="coin" className="coin-resultM">
+                            <div id="coin" className="coin-result-mobile">
                                 <div className="face front">
                                     <img className="front-img" src={TailsAnimation} alt="Tails"/>
                                 </div>
@@ -332,7 +357,7 @@ const FungibleFlipMobile = () => {
                                 </div>
                             </div>
                         ) : (
-                            <div id="coin" className="coin-resultM">
+                            <div id="coin" className="coin-result-mobile">
                                 <div className="face front">
                                     <img className="front-img" src={HeadsAnimation} alt="Heads" />
                                 </div>
@@ -342,25 +367,17 @@ const FungibleFlipMobile = () => {
                             </div>
                         )}
                     </div>
-                    <div className="levelM">
-                        <div className="levelbar-containerM">
-                            <div className="levelbarM">
-                                <div className="experienceM" style={{width: `${(experience / 1000) * 100}%`}}/>
-                            </div>
-                        </div>
-                        Level {level}
-                    </div>
                     {(choice === flipResult) ? (
-                        <button className="result-txtM">You chose {getTextResult()} <br/> and doubled up</button>
+                        <button className="result-txt-mobile">You chose {getTextResult()} <br/> and doubled up</button>
                     ) : (
-                        <button className="result-txtM">You chose {getTextResult()} <br/> and got rugged</button>
+                        <button className="result-txt-mobile">You chose {getTextResult()} <br/> and got rugged</button>
                     )}
-                    <button className="result-btnM" onClick={handleFlipResult}>FLIP AGAIN</button>
+                    <button className="result-btn-mobile" onClick={handleFlipResult}>FLIP AGAIN</button>
                 </div>
             ) : (
-                <div className="mainM">
-                    <div className="coin-containerM">
-                        <div id="coin" className="coin-animatedM">
+                <div className="main-mobile">
+                    <div className="coin-container-mobile">
+                        <div id="coin" className="coin-animated-mobile">
                             <div id="head" className="face front">
                                 <img className="front-img" src={Heads} alt="Heads" />
                             </div>
@@ -369,39 +386,31 @@ const FungibleFlipMobile = () => {
                             </div>
                         </div>
                     </div>
-                    <div className="levelM">
-                        <div className="levelbar-containerM">
-                            <div className="levelbarM">
-                                <div className="experienceM" style={{width: `${(experience / 1000) * 100}%`}}/>
-                            </div>
-                        </div>
-                        Level {level}
-                    </div>
                     {(stage === 1 || stage === 2 || stage === 3) ? (
                         <div>
-                            <button className="flip-infoM">
+                            <button className="flip-info-mobile">
                                 {getTextResult()} <br/> {amount} eth
                             </button>
                         </div>
                     ) : (
                         <div>
-                            <div className="choicesM">
+                            <div className="choices-mobile">
                                 <button
-                                    className={`choice-btnM ${choice === 1 ? "choice-btn-selectedM" : ""}`}
+                                    className={`choice-btn-mobile ${choice === 1 ? "choice-btn-mobile-selected" : ""}`}
                                     onClick={handleHeads}
                                 >
                                     HEADS
                                 </button>
                                 <button
-                                    className={`choice-btnM ${choice === 0 ? "choice-btn-selectedM" : ""}`}
+                                    className={`choice-btn-mobile ${choice === 0 ? "choice-btn-mobile-selected" : ""}`}
                                     onClick={handleTails}
                                 >
                                     TAILS
                                 </button>
                             </div>
-                            <div className="amountsM">
+                            <div className="amounts-mobile">
                                 <button
-                                    className={`amount-btnM ${amount === 0.0025 ? "amount-btn-selectedM" : ""}`}
+                                    className={`amount-btn-mobile ${amount === 0.0025 ? "amount-btn-mobile-selected" : ""}`}
                                     onClick={() => {
                                         setAmount(0.0025);
                                         setStage(0);
@@ -410,7 +419,7 @@ const FungibleFlipMobile = () => {
                                     0.0025
                                 </button>
                                 <button
-                                    className={`amount-btnM ${amount === 0.005 ? "amount-btn-selectedM" : ""}`}
+                                    className={`amount-btn-mobile ${amount === 0.005 ? "amount-btn-mobile-selected" : ""}`}
                                     onClick={() => {
                                         setAmount(0.005);
                                         setStage(0);
@@ -419,7 +428,7 @@ const FungibleFlipMobile = () => {
                                     0.005
                                 </button>
                                 <button
-                                    className={`amount-btnM ${amount === 0.01 ? "amount-btn-selectedM" : ""}`}
+                                    className={`amount-btn-mobile ${amount === 0.01 ? "amount-btn-mobile-selected" : ""}`}
                                     onClick={() => {
                                         setAmount(0.01);
                                         setStage(0);
@@ -428,9 +437,9 @@ const FungibleFlipMobile = () => {
                                     0.01
                                 </button>
                             </div>
-                            <div className="amountsM">
+                            <div className="amounts-mobile">
                                 <button
-                                    className={`amount-btnM ${amount === 0.025 ? "amount-btn-selectedM" : ""}`}
+                                    className={`amount-btn-mobile ${amount === 0.025 ? "amount-btn-mobile-selected" : ""}`}
                                     onClick={() => {
                                         setAmount(0.025);
                                         setStage(0);
@@ -439,7 +448,7 @@ const FungibleFlipMobile = () => {
                                     0.025
                                 </button>
                                 <button
-                                    className={`amount-btnM ${amount === 0.05 ? "amount-btn-selectedM" : ""}`}
+                                    className={`amount-btn-mobile ${amount === 0.05 ? "amount-btn-mobile-selected" : ""}`}
                                     onClick={() => {
                                         setAmount(0.05);
                                         setStage(0);
@@ -448,7 +457,7 @@ const FungibleFlipMobile = () => {
                                     0.05
                                 </button>
                                 <button
-                                    className={`amount-btnM ${amount === 0.1 ? "amount-btn-selectedM" : ""}`}
+                                    className={`amount-btn-mobile ${amount === 0.1 ? "amount-btn-mobile-selected" : ""}`}
                                     onClick={() => {
                                         setAmount(0.1);
                                         setStage(0);
@@ -461,12 +470,12 @@ const FungibleFlipMobile = () => {
                     ) }
                     {isConnected ? (
                         stage === 2 ? (
-                            <button className="flip-btnM" onClick={handleFlip}> {getTextButton()} </button>
+                            <button className="flip-btn-mobile" onClick={handleFlip}> {getTextButton()} </button>
                         ) : (
-                            <button className="flip-btnM" onClick={(choice > 1 || amount === 0) ? handleNullInput : handleDeposit}> {getTextButton()} </button>
+                            <button className="flip-btn-mobile" onClick={(choice > 1 || amount === 0) ? handleNullInput : handleDeposit}> {getTextButton()} </button>
                         )
                     ) : (
-                        <button className="flip-btnM" onClick={connectWallet}> CONNECT WALLET </button>
+                        <button className="flip-btn-mobile" onClick={connectWallet}> CONNECT WALLET </button>
                     )}
                 </div>
             )}

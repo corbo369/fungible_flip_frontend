@@ -363,3 +363,217 @@
     color: #721c24;
 }
 
+.title-mobile {
+    text-align: center;
+    font-size: 4.5vh;
+    font-family: PressStart2P, serif;
+    text-shadow:
+            0.24vw 0.24vw 0.24vw #693c8d,
+            -0.15vw 0.15vw 0.24vw #FCFC03;
+    color: whitesmoke;
+}
+
+.middle-container-mobile {
+    display: flex;
+    align-items: center;
+    justify-items: center;
+    justify-content: space-evenly;
+    margin-top: -2.4vh;
+    margin-bottom: 2.7vh;
+}
+
+.leaderboard-btn-mobile {
+    height: 6vh;
+    width: 24vh;
+    font-family: ArcadeClassic, serif;
+    font-size: 3vh;
+    color: white;
+    text-shadow: .18vh .18vh black;
+    background-color: #490eab;
+    border: solid .33vh black;
+    opacity: 100%;
+}
+
+.social-btn-mobile {
+    height: 6vh;
+    width: 6vh;
+    background-color: #490eab;
+    border: solid .33vh black;
+    border-radius: .33vw;
+    box-shadow: 0 0 0.33vw purple;
+}
+
+.social-btn-mobile:hover {
+    opacity: 75%;
+    cursor: pointer;
+}
+
+.twitter-mobile {
+    margin-top: 0.24vh;
+    margin-left: -1vh;
+    height: 3.9vh;
+    width: 3.9vh;
+}
+
+.levelbar-container-mobile {
+    display: flex;
+    align-items: center;
+}
+
+.level-mobile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: ArcadeClassic, serif;
+    font-size: 3.6vh;
+    text-shadow: .18vh .18vh purple;
+}
+
+.levelbar-mobile {
+    width: 30vw;
+    height: 3.6vw;
+    margin-top: 1vh;
+    background: #eee;
+    border-radius: 2px;
+    box-shadow: 0 0 0.45vw purple;
+    overflow: hidden;
+}
+
+.experience-mobile {
+    height: 100%;
+    background: #43f535;
+    border-radius: 4px;
+    transition: width 0.5s;
+}
+
+.main-mobile {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.choices-mobile {
+    display: flex;
+    flex-direction: row;
+}
+
+.choice-btn-mobile {
+    height: 7.4vw;
+    width: 40vw;
+    font-family: ArcadeClassic, serif;
+    font-size: 3.6vh;
+    color: white;
+    text-shadow: .18vh .18vh black;
+    background-color: #490eab;
+    border: solid .33vh black;
+    opacity: 100%;
+}
+
+.choice-btn-mobile-selected {
+    border: solid .33vh black;
+    opacity: 75%;
+}
+
+.amounts-mobile {
+    display: flex;
+    flex-direction: row;
+}
+
+.amount-btn-mobile {
+    height: 6.3vw;
+    width: 26.666666vw;
+    font-family: ArcadeClassic, serif;
+    font-size: 3vh;
+    color: white;
+    text-shadow: .18vh .18vh black;
+    background-color: #490eab;
+    border: solid .33vh black;
+    opacity: 100%;
+}
+
+.amount-btn-mobile-selected {
+    border: solid .33vh black;
+    opacity: 75%;
+}
+
+.flip-info-mobile {
+    height: 20vw;
+    width: 80vw;
+    font-family: ArcadeClassic, serif;
+    font-size: 5.4vh;
+    color: white;
+    text-shadow: .18vh .18vh black;
+    background-color: #490eab;
+    border: solid .33vh black;
+    opacity: 75%;
+}
+
+.flip-btn-mobile {
+    height: 10vw;
+    width: 80vw;
+    font-family: ArcadeClassic, serif;
+    font-size: 4.8vh;
+    color: white;
+    text-shadow: .18vh .18vh black;
+    background-color: #490eab;
+    border: solid .33vh black;
+    opacity: 100%;
+}
+
+.result-txt-mobile {
+    height: 20vw;
+    width: 80vw;
+    font-family: ArcadeClassic, serif;
+    font-size: 2.4vw;
+    color: white;
+    text-shadow: .18vh .18vh black;
+    background-color: #490eab;
+    border: solid .33vh black;
+    opacity: 75%;
+}
+
+.result-btn-mobile {
+    height: 10vw;
+    width: 80vw;
+    font-family: ArcadeClassic, serif;
+    font-size: 2.8vw;
+    color: white;
+    text-shadow: .18vh .18vh black;
+    background-color: #490eab;
+    border: solid .33vh black;
+    opacity: 100%;
+}
+
+.coin-container-mobile {
+    height: 51.7vh;
+}
+
+.coin-animated-mobile {
+    position: relative;
+    width: 45vh;
+    height: 45vh;
+    animation-name: spinning-mobile;
+    animation-duration: 2.1s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+    animation-play-state: paused;
+    transform-style: preserve-3d;
+}
+
+.coin-result-mobile {
+    position: relative;
+    width: 24vw;
+    height: 24vw;
+}
+
+@keyframes spinning-mobile {
+    from { transform: perspective(48vh) rotateY(0deg); }
+    to { transform: perspective(48vh) rotateY(360deg); }
+}
+
+@keyframes flipping-mobile {
+    from { transform: perspective(66vh) rotateX(0deg); }
+    to { transform: perspective(66vh) rotateX(-1080deg); }
+}
+

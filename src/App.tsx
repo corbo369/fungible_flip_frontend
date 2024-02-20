@@ -1,6 +1,7 @@
 import React from 'react';
 import Background from './components/background';
 import FungibleFlip from './components/fungibleFlip';
+import BackgroundMobile from "./components/backgroundMobile";
 import FungibleFlipMobile from "./components/fungibleFlipMobile";
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
     if (isMobile()) {
         return (
             <div className="App">
+                <BackgroundMobile/>
                 <FungibleFlipMobile/>
             </div>
         );

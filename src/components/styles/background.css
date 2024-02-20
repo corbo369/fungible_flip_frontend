@@ -7,6 +7,17 @@
     border-bottom: 0.5vw solid #490eab;
 }
 
+.pacman-background-mobile {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    z-index: -1;
+    position: absolute;
+    margin-top: -4.2vh;
+    border-top: 1.2vh solid #490eab;
+    border-bottom: 1.2vh solid #490eab;
+}
+
 .row {
     display: flex;
     flex-direction: row;
@@ -19,6 +30,19 @@
     position: relative;
     width: 4vw;
     height: 4vw;
+    background-color: black;
+    z-index: -1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.subcomponent-mobile {
+    box-sizing: border-box;
+    box-shadow: 0 0 0.5vh #b06500;
+    position: relative;
+    width: 10vw;
+    height: 10vw;
     background-color: black;
     z-index: -1;
     display: flex;
@@ -39,7 +63,24 @@
     box-shadow: 0 0 0.5vw yellow;
 }
 
+.dot-mobile {
+    width: 0.66vw;
+    height: 0.66vw;
+    background-color: #FCFC03;
+    border-radius: 50%;
+    box-shadow: 0 0 0.5vw yellow;
+}
+
 .powerup {
+    width: 2.1vw;
+    height: 2.1vw;
+    background-color: #FCFC03;
+    border-radius: 50%;
+    box-shadow: .1vw 0 1vw #ff9100;
+    animation: glow 1.2s infinite alternate;
+}
+
+.powerup-mobile {
     width: 2.1vw;
     height: 2.1vw;
     background-color: #FCFC03;
@@ -63,6 +104,12 @@
     animation: grow 0.9s infinite alternate;
 }
 
+.cherry-mobile {
+    width: 2.7vw;
+    height: 2.7vw;
+    animation: grow 0.9s infinite alternate;
+}
+
 @keyframes grow {
     from {
         width: 2.7vw;
@@ -78,14 +125,30 @@
     border-top: 0.5vw solid #490eab;
 }
 
+.subcomponent-mobile.has-top-wall {
+    border-top: 0.3vh solid #490eab;
+}
+
 .subcomponent.has-bottom-wall {
     border-bottom: 0.5vw solid #490eab;
+}
+
+.subcomponent-mobile.has-bottom-wall {
+    border-top: 0.3vh solid #490eab;
 }
 
 .subcomponent.has-left-wall {
     border-left: 0.5vw solid #490eab;
 }
 
+.subcomponent-mobile.has-left-wall {
+    border-top: 0.3vh solid #490eab;
+}
+
 .subcomponent.has-right-wall {
     border-right: 0.5vw solid #490eab;
+}
+
+.subcomponent-mobile.has-right-wall {
+    border-top: 0.3vh solid #490eab;
 }
