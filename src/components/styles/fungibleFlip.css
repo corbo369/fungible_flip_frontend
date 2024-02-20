@@ -365,7 +365,7 @@
 
 .title-mobile {
     text-align: center;
-    font-size: 4.5vh;
+    font-size: 6.9vw;
     font-family: PressStart2P, serif;
     text-shadow:
             0.24vw 0.24vw 0.24vw #693c8d,
@@ -378,27 +378,27 @@
     align-items: center;
     justify-items: center;
     justify-content: space-evenly;
-    margin-top: -2.4vh;
-    margin-bottom: 2.7vh;
+    margin-top: -4.2vw;
+    margin-bottom: 1.8vw;
 }
 
 .leaderboard-btn-mobile {
-    height: 6vh;
-    width: 24vh;
+    height: 10.5vw;
+    width: 36vw;
     font-family: ArcadeClassic, serif;
-    font-size: 3vh;
+    font-size: 4.5vw;
     color: white;
-    text-shadow: .18vh .18vh black;
+    text-shadow: .18vw .18vw black;
     background-color: #490eab;
-    border: solid .33vh black;
+    border: solid .33vw black;
     opacity: 100%;
 }
 
 .social-btn-mobile {
-    height: 6vh;
-    width: 6vh;
+    height: 10.5vw;
+    width: 10.5vw;
     background-color: #490eab;
-    border: solid .33vh black;
+    border: solid .66vw black;
     border-radius: .33vw;
     box-shadow: 0 0 0.33vw purple;
 }
@@ -409,10 +409,8 @@
 }
 
 .twitter-mobile {
-    margin-top: 0.24vh;
-    margin-left: -1vh;
-    height: 3.9vh;
-    width: 3.9vh;
+    margin-left: -1.8vw;
+    height: 7.2vw;
 }
 
 .levelbar-container-mobile {
@@ -425,14 +423,14 @@
     flex-direction: column;
     align-items: center;
     font-family: ArcadeClassic, serif;
-    font-size: 3.6vh;
-    text-shadow: .18vh .18vh purple;
+    font-size: 6.3vw;
+    text-shadow: .18vw .18vw purple;
 }
 
 .levelbar-mobile {
     width: 30vw;
     height: 3.6vw;
-    margin-top: 1vh;
+    margin-top: 1.8vw;
     background: #eee;
     border-radius: 2px;
     box-shadow: 0 0 0.45vw purple;
@@ -462,16 +460,16 @@
     height: 7.4vw;
     width: 40vw;
     font-family: ArcadeClassic, serif;
-    font-size: 3.6vh;
+    font-size: 6vw;
     color: white;
-    text-shadow: .18vh .18vh black;
+    text-shadow: .18vw .18vw black;
     background-color: #490eab;
-    border: solid .33vh black;
+    border: solid .33vw black;
     opacity: 100%;
 }
 
 .choice-btn-mobile-selected {
-    border: solid .33vh black;
+    border: solid .33vw black;
     opacity: 75%;
 }
 
@@ -484,16 +482,16 @@
     height: 6.3vw;
     width: 26.666666vw;
     font-family: ArcadeClassic, serif;
-    font-size: 3vh;
+    font-size: 4.5vw;
     color: white;
-    text-shadow: .18vh .18vh black;
+    text-shadow: .18vw .18vw black;
     background-color: #490eab;
-    border: solid .33vh black;
+    border: solid .33vw black;
     opacity: 100%;
 }
 
 .amount-btn-mobile-selected {
-    border: solid .33vh black;
+    border: solid .33vw black;
     opacity: 75%;
 }
 
@@ -501,11 +499,11 @@
     height: 20vw;
     width: 80vw;
     font-family: ArcadeClassic, serif;
-    font-size: 5.4vh;
+    font-size: 8.1vw;
     color: white;
-    text-shadow: .18vh .18vh black;
+    text-shadow: .18vw .18vw black;
     background-color: #490eab;
-    border: solid .33vh black;
+    border: solid .33vw black;
     opacity: 75%;
 }
 
@@ -513,11 +511,11 @@
     height: 10vw;
     width: 80vw;
     font-family: ArcadeClassic, serif;
-    font-size: 4.8vh;
+    font-size: 6vw;
     color: white;
-    text-shadow: .18vh .18vh black;
+    text-shadow: .18vw .18vw black;
     background-color: #490eab;
-    border: solid .33vh black;
+    border: solid .33vw black;
     opacity: 100%;
 }
 
@@ -525,11 +523,11 @@
     height: 20vw;
     width: 80vw;
     font-family: ArcadeClassic, serif;
-    font-size: 2.4vw;
+    font-size: 8.1vw;
     color: white;
-    text-shadow: .18vh .18vh black;
+    text-shadow: .18vw .18vw black;
     background-color: #490eab;
-    border: solid .33vh black;
+    border: solid .33vw black;
     opacity: 75%;
 }
 
@@ -537,22 +535,22 @@
     height: 10vw;
     width: 80vw;
     font-family: ArcadeClassic, serif;
-    font-size: 2.8vw;
+    font-size: 6vw;
     color: white;
-    text-shadow: .18vh .18vh black;
+    text-shadow: .18vw .18vw black;
     background-color: #490eab;
-    border: solid .33vh black;
+    border: solid .33vw black;
     opacity: 100%;
 }
 
 .coin-container-mobile {
-    height: 51.7vh;
+    height: 81.5vw;
 }
 
 .coin-animated-mobile {
     position: relative;
-    width: 45vh;
-    height: 45vh;
+    width: 72vw;
+    height: 72vw;
     animation-name: spinning-mobile;
     animation-duration: 2.1s;
     animation-iteration-count: infinite;
