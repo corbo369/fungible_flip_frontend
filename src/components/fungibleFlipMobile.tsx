@@ -168,15 +168,15 @@ const FungibleFlipMobile = () => {
                 if (parsedLog.args && parsedLog.args[2] !== undefined) {
                     // @ts-ignore
                     setFlipResult(Number(parsedLog.args[2]));
+                    setStage(4);
                 }
                 // @ts-ignore
                 if (Number(parsedLog.args[2]) === choice) {
-                    if(!muted) playSound('win');
+                    if (!muted) playSound('win');
                 } else {
-                    if(!muted) playSound('lose');
+                    if (!muted) playSound('lose');
                 }
             });
-            setStage(4);
         },
     });
 
