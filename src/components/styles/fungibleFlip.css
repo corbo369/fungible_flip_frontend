@@ -403,6 +403,16 @@
     box-shadow: 0 0 0.33vw purple;
 }
 
+.social-btn-mobile-selected {
+    height: 10.5vw;
+    width: 10.5vw;
+    background-color: #490eab;
+    border: solid .66vw black;
+    border-radius: .33vw;
+    box-shadow: 0 0 0.33vw purple;
+    opacity: 66%;
+}
+
 .social-btn-mobile:hover {
     opacity: 75%;
     cursor: pointer;
@@ -410,6 +420,12 @@
 
 .twitter-mobile {
     margin-left: -1.8vw;
+    height: 7.2vw;
+}
+
+.mute-img-mobile {
+    margin-left: -1.8vw;
+    margin-top: .66vw;
     height: 7.2vw;
 }
 
@@ -561,8 +577,8 @@
 
 .coin-result-mobile {
     position: relative;
-    width: 24vw;
-    height: 24vw;
+    width: 72vw;
+    height: 72vw;
 }
 
 @keyframes spinning-mobile {

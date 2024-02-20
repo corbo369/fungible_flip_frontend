@@ -1,14 +1,57 @@
 import React, {useState} from 'react';
 import {ethers} from "ethers";
+import { useWatchContractEvent } from 'wagmi'
+import { Howl } from 'howler';
 import Alert from './alert';
 import axios from 'axios';
 import flipABI from '../assets/FungibleFlip.json';
+import Mute from '../assets/images/mute.png';
 import Twitter from '../assets/images/twitter.png';
 import Heads from '../assets/images/heads.png';
 import Tails from '../assets/images/tails.png';
 import HeadsAnimation from '../assets/images/heads-animation.png';
 import TailsAnimation from '../assets/images/tails-animation.png';
 import './styles/fungibleFlip.css';
+
+function playSound(name: string) {
+    const soundMap = {
+        'deposit': () => new Howl({
+            src: [`${process.env.PUBLIC_URL}/audio/deposit.wav`],
+            volume: .45,
+            autoplay: false,
+            preload: true,
+        }),
+        'background': () => new Howl({
+            src: [`${process.env.PUBLIC_URL}/audio/background.wav`],
+            volume: 0.24,
+            autoplay: false,
+            preload: true,
+            loop: false,
+        }),
+        'flip': () => new Howl({
+            src: [`${process.env.PUBLIC_URL}/audio/flip.wav`],
+            volume: .45,
+            autoplay: false,
+            preload: true,
+        }),
+        'win': () => new Howl({
+            src: [`${process.env.PUBLIC_URL}/audio/winner.wav`],
+            volume: .33,
+            autoplay: false,
+            preload: true,
+        }),
+        'lose': () => new Howl({
+            src: [`${process.env.PUBLIC_URL}/audio/loser.wav`],
+            volume: .33,
+            autoplay: false,
+            preload: true,
+        }),
+    };
+    // @ts-ignore
+    const sound = soundMap[name]();
+    sound.play();
+    return sound;
+}
 
 const FungibleFlipMobile = () => {
 
@@ -28,17 +71,15 @@ const FungibleFlipMobile = () => {
 
     const [leaderboardText, setLeaderboardText] = useState<string>("leaderboard");
 
+    const [muted, setMuted] = useState<boolean>(false);
+
     const [showChainAlert, setShowChainAlert] = useState(false);
-
-    const chainID = 168587773;
-
-    const provider = new ethers.JsonRpcProvider('https://rpc.ankr.com/blast_testnet_sepolia/647924a9aa98249697add40f8edd819ae04c3e97ef701d2e425617aff280850f');
 
     const contractAddress = "0x7f03cB79551BD307675eE06C3775929d81d9f7dD";
 
-    const contract = new ethers.Contract(contractAddress, flipABI.abi, provider);
-
     const isConnected = Boolean(userAddress);
+
+    const chainID = 168587773;
 
     const handleHeads = () => {
         setChoice(1);
@@ -93,6 +134,51 @@ const FungibleFlipMobile = () => {
     const handleAlertClose = () => {
         setShowChainAlert(false);
     };
+
+    const contractInterface = new ethers.Interface(flipABI.abi);
+
+    useWatchContractEvent({
+        address: contractAddress,
+        abi: flipABI.abi,
+        args: [userAddress],
+        eventName: 'Deposit',
+        onLogs: (logs) => {
+            console.log('New logs!', logs);
+            setTimeout(() => {
+                setStage(2);
+                // @ts-ignore
+                document.getElementById("coin").style.animationIterationCount = 1;
+                // @ts-ignore
+                document.getElementById("coin").style.animationPlayState = "paused";
+            }, 12000);
+        },
+    });
+
+    useWatchContractEvent({
+        address: contractAddress,
+        abi: flipABI.abi,
+        args: [userAddress],
+        eventName: 'Result',
+        onLogs: (logs) => {
+            console.log('New logs for Result event!', logs);
+            logs.forEach(log => {
+                const parsedLog = contractInterface.parseLog(log);
+                console.log("Parsed log:", parsedLog);
+                // @ts-ignore
+                if (parsedLog.args && parsedLog.args[2] !== undefined) {
+                    // @ts-ignore
+                    setFlipResult(Number(parsedLog.args[2]));
+                }
+                // @ts-ignore
+                if (Number(parsedLog.args[2]) === choice) {
+                    if(!muted) playSound('win');
+                } else {
+                    if(!muted) playSound('lose');
+                }
+            });
+            setStage(4);
+        },
+    });
 
     async function connectWallet() {
         // @ts-ignore
@@ -166,6 +252,12 @@ const FungibleFlipMobile = () => {
         if (window.ethereum) {
             setStage(1);
             // @ts-ignore
+            document.getElementById("coin").style.animationIterationCount = "infinite";
+            // @ts-ignore
+            document.getElementById("coin").style.animationTimingFunction = "linear";
+            // @ts-ignore
+            document.getElementById("coin").style.animationPlayState = "running";
+            // @ts-ignore
             const provider = new ethers.BrowserProvider(window.ethereum)
             const signer = await provider.getSigner();
             const contract = new ethers.Contract(
@@ -179,11 +271,14 @@ const FungibleFlipMobile = () => {
                 setStage(0);
                 return;
             }
+            if(!muted) playSound('deposit');
+            setTimeout(() => {
+                if(!muted) playSound('background');
+            }, 12000);
             try {
                 const randomNumber = ethers.randomBytes(32);
                 const commitment = ethers.keccak256(randomNumber);
                 const result = await contract.deposit(randomNumber, commitment, choice, {value: ethers.parseEther(String(amount))});
-                await handleSubscribeDeposit();
                 console.log(result);
             } catch (err) {
                 setStage(0);
@@ -192,44 +287,19 @@ const FungibleFlipMobile = () => {
         }
     }
 
-    async function handleSubscribeDeposit() {
-
-        const eventFilter = contract.filters.Deposit(userAddress, null);
-
-        try {
-            // @ts-ignore
-            document.getElementById("coin").style.animationIterationCount = "infinite";
-            // @ts-ignore
-            document.getElementById("coin").style.animationTimingFunction = "linear";
-            // @ts-ignore
-            document.getElementById("coin").style.animationPlayState = "running";
-
-            await contract.on(eventFilter, (event) => {
-                console.log('Event data:', event);
-                setTimeout(() => {
-                    setStage(2);
-                    // @ts-ignore
-                    document.getElementById("coin").style.animationIterationCount = 1;
-                    // @ts-ignore
-                    document.getElementById("coin").style.animationPlayState = "paused";
-                }, 12000);
-                contract.off(eventFilter);
-            });
-        } catch (error) {
-            // @ts-ignore
-            document.getElementById("coin").style.animationIterationCount = 1;
-            // @ts-ignore
-            document.getElementById("coin").style.animationPlayState = "paused";
-            setStage(0);
-            console.log("error: ", error);
-        }
-    }
-
     async function handleFlip() {
         try {
             // @ts-ignore
             if (window.ethereum) {
                 setStage(3);
+                // @ts-ignore
+                document.getElementById("coin").style.animationName = "flipping-mobile";
+                // @ts-ignore
+                document.getElementById("coin").style.animationTimingFunction = "linear";
+                // @ts-ignore
+                document.getElementById("coin").style.animationIterationCount = "infinite";
+                // @ts-ignore
+                document.getElementById("coin").style.animationPlayState = "running";
                 // @ts-ignore
                 const provider = new ethers.BrowserProvider(window.ethereum);
                 const signer = await provider.getSigner();
@@ -244,6 +314,7 @@ const FungibleFlipMobile = () => {
                     setStage(2);
                     return;
                 }
+                if(!muted) playSound('flip');
                 const sequence = await contract.sequenceNumbers(userAddress);
                 const sequenceNumber = Number(sequence);
                 const response = await axios.get('https://fungible-flip-aea2a3335ad7.herokuapp.com/api/getRevelation', {
@@ -253,8 +324,6 @@ const FungibleFlipMobile = () => {
                 });
                 const entropyCommitment = `0x${response.data.value.data}`;
                 const result = await contract.flip(sequenceNumber, entropyCommitment);
-                await handleSubscribeFlip();
-                await updateLevel(userAddress);
                 console.log(result);
             }
         } catch (err) {
@@ -267,53 +336,15 @@ const FungibleFlipMobile = () => {
         }
     }
 
-    async function handleSubscribeFlip() {
-
-        const eventFilter = contract.filters.Result(userAddress, null, null, null);
-
-        try {
-
-            setTimeout(() => {
-                // @ts-ignore
-                document.getElementById("coin").style.animationName = "flippingM";
-                // @ts-ignore
-                document.getElementById("coin").style.animationTimingFunction = "linear";
-                // @ts-ignore
-                document.getElementById("coin").style.animationIterationCount = "infinite";
-                // @ts-ignore
-                document.getElementById("coin").style.animationPlayState = "running";
-            }, 300);
-
-            await contract.on(eventFilter, (event) => {
-                console.log('Event data:', event);
-
-                setFlipResult(Number(event.args[2]));
-
-                // @ts-ignore
-                document.getElementById("coin").style.animationIterationCount = 1;
-                // @ts-ignore
-                document.getElementById("coin").style.animationPlayState = "paused";
-
-                setStage(4);
-
-                contract.off(eventFilter);
-            });
-        } catch (error) {
-            setStage(0);
-            console.error('Error subscribing to events:', error);
-        }
-    }
-
     async function handleFlipResult() {
-        // @ts-ignore
-        document.getElementById("coin").style.animationIterationCount = 1;
         // @ts-ignore
         document.getElementById("coin").style.animationPlayState = "paused";
         // @ts-ignore
-        document.getElementById("coin").style.animationName = "spinningM";
+        document.getElementById("coin").style.animationName = "spinning-mobile";
         // @ts-ignore
         document.getElementById("coin").style.animationTimingFunction = "linear";
         setStage(0);
+        await updateLevel(userAddress);
     }
 
     return (
@@ -328,6 +359,12 @@ const FungibleFlipMobile = () => {
                         <img className="twitter-mobile" src={Twitter} alt="Twitter" />
                     </button>
                 </a>
+                <button
+                    className={`social-btn-mobile ${muted ? "social-btn-mobile-selected" : ""}`}
+                    onClick={() => setMuted(!muted)}
+                >
+                    <img className="mute-img-mobile" src={Mute} alt="Mute"/>
+                </button>
                 <button
                     className="leaderboard-btn-mobile"
                     onMouseEnter={() => setLeaderboardText("COMING SOON")}
