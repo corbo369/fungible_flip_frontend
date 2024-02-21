@@ -64,11 +64,11 @@
 }
 
 .dot-mobile {
-    width: 0.66vw;
-    height: 0.66vw;
+    width: 1.8vw;
+    height: 1.8vw;
     background-color: #FCFC03;
     border-radius: 50%;
-    box-shadow: 0 0 0.5vw yellow;
+    box-shadow: 0 0 1.2vw yellow;
 }
 
 .powerup {
@@ -81,8 +81,8 @@
 }
 
 .powerup-mobile {
-    width: 2.1vw;
-    height: 2.1vw;
+    width: 4.5vw;
+    height: 4.5vw;
     background-color: #FCFC03;
     border-radius: 50%;
     box-shadow: .1vw 0 1vw #ff9100;
@@ -105,9 +105,9 @@
 }
 
 .cherry-mobile {
-    width: 2.7vw;
-    height: 2.7vw;
-    animation: grow 0.9s infinite alternate;
+    width: 5.4vw;
+    height: 5.4vw;
+    animation: grow-mobile 0.9s infinite alternate;
 }
 
 @keyframes grow {
@@ -121,12 +121,23 @@
     }
 }
 
+@keyframes grow-mobile {
+    from {
+        width: 6vw;
+        height: 6vw;
+    }
+    to {
+        width: 6.3vw;
+        height: 6.3vw;
+    }
+}
+
 .subcomponent.has-top-wall {
     border-top: 0.5vw solid #490eab;
 }
 
 .subcomponent-mobile.has-top-wall {
-    border-top: 0.3vh solid #490eab;
+    border-top: 1.2vw solid #490eab;
 }
 
 .subcomponent.has-bottom-wall {
@@ -134,7 +145,7 @@
 }
 
 .subcomponent-mobile.has-bottom-wall {
-    border-top: 0.3vh solid #490eab;
+    border-bottom: 1.2vw solid #490eab;
 }
 
 .subcomponent.has-left-wall {
@@ -142,7 +153,7 @@
 }
 
 .subcomponent-mobile.has-left-wall {
-    border-top: 0.3vh solid #490eab;
+    border-left: 1.2vw solid #490eab;
 }
 
 .subcomponent.has-right-wall {
@@ -150,5 +161,5 @@
 }
 
 .subcomponent-mobile.has-right-wall {
-    border-top: 0.3vh solid #490eab;
+    border-right: 1.2vw solid #490eab;
 }

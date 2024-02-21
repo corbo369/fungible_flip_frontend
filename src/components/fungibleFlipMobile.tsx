@@ -144,6 +144,9 @@ const FungibleFlipMobile = () => {
         eventName: 'Deposit',
         onLogs: (logs) => {
             console.log('New logs!', logs);
+            setTimeout( () => {
+                if(!muted) playSound('background');
+            }, 9000)
             setTimeout(() => {
                 setStage(2);
                 // @ts-ignore
@@ -161,22 +164,16 @@ const FungibleFlipMobile = () => {
         eventName: 'Result',
         onLogs: (logs) => {
             console.log('New logs for Result event!', logs);
-            logs.forEach(log => {
-                const parsedLog = contractInterface.parseLog(log);
-                console.log("Parsed log:", parsedLog);
-                // @ts-ignore
-                if (parsedLog.args && parsedLog.args[2] !== undefined) {
-                    // @ts-ignore
-                    setFlipResult(Number(parsedLog.args[2]));
-                    setStage(4);
-                }
-                // @ts-ignore
-                if (Number(parsedLog.args[2]) === choice) {
-                    if (!muted) playSound('win');
-                } else {
-                    if (!muted) playSound('lose');
-                }
-            });
+            const parsedLog = contractInterface.parseLog(logs[0]);
+            // @ts-ignore
+            setFlipResult(Number(parsedLog.args[2]));
+            // @ts-ignore
+            if(parsedLog.args[1] === parsedLog.args[2]) {
+                if (!muted) playSound('win');
+            } else {
+                if (!muted) playSound('lose');
+            }
+            setStage(4);
         },
     });
 
@@ -216,6 +213,9 @@ const FungibleFlipMobile = () => {
                     setStage(0);
                 }
                 else {
+                    const request = await contract.requests(sequenceNumber);
+                    setAmount(Number(ethers.formatEther(request[1])));
+                    setChoice(Number(request[4]));
                     setStage(2);
                 }
             } catch (err) {
@@ -272,9 +272,6 @@ const FungibleFlipMobile = () => {
                 return;
             }
             if(!muted) playSound('deposit');
-            setTimeout(() => {
-                if(!muted) playSound('background');
-            }, 12000);
             try {
                 const randomNumber = ethers.randomBytes(32);
                 const commitment = ethers.keccak256(randomNumber);

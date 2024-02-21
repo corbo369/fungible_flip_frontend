@@ -174,6 +174,9 @@ const FungibleFlip = () => {
                     setStage(0);
                 }
                 else {
+                    const request = await contract.requests(sequenceNumber);
+                    setAmount(Number(ethers.formatEther(request[1])));
+                    setChoice(Number(request[4]));
                     setStage(2);
                 }
             } catch (err) {
@@ -252,8 +255,10 @@ const FungibleFlip = () => {
             await contract.on(eventFilter, (event) => {
                 console.log('Event data:', event);
                 setTimeout(() => {
-                    setStage(2);
                     if(!muted) playSound('background');
+                }, 9000);
+                setTimeout(() => {
+                    setStage(2);
                     // @ts-ignore
                     document.getElementById("coin").style.animationIterationCount = 1;
                     // @ts-ignore
@@ -341,7 +346,7 @@ const FungibleFlip = () => {
 
                 setStage(4);
 
-                if (Number(event.args[2]) === choice) {
+                if (event.args[1] === event.args[2]) {
                     if(!muted) playSound('win');
                 } else {
                     if(!muted) playSound('lose');
