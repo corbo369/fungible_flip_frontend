@@ -78,7 +78,7 @@ const FungibleFlip = () => {
 
     const provider = new ethers.JsonRpcProvider('https://rpc.ankr.com/blast_testnet_sepolia/647924a9aa98249697add40f8edd819ae04c3e97ef701d2e425617aff280850f');
 
-    const contractAddress = "0x7f03cB79551BD307675eE06C3775929d81d9f7dD";
+    const contractAddress = "0xc7aEAca88cb6819a2fc7b46c667C5b0894ba245E";
 
     const contract = new ethers.Contract(contractAddress, flipABI.abi, provider);
 
@@ -137,6 +137,84 @@ const FungibleFlip = () => {
     const handleAlertClose = () => {
         setShowChainAlert(false);
     };
+
+    /*
+    async function getStats() {
+        // @ts-ignore
+        if (window.ethereum) {
+            // @ts-ignore
+            const provider = new ethers.BrowserProvider(window.ethereum)
+            const signer = await provider.getSigner();
+            const contract = new ethers.Contract(
+                contractAddress,
+                flipABI.abi,
+                signer
+            );
+            try {
+                const userStats = await contract.stats(userAddress);
+
+                // Initialize an empty array to hold the decoded flips
+                let flips: number[] = [];
+
+                // Convert lastTen to a binary string, ensuring it's 32 characters long for all bits
+                let binaryString = BigInt(userStats[0]).toString(2).padStart(32, '0');
+
+                // New logic to ensure we only process actual flips
+                let actualFlipsFound = false;
+
+                for (let i = 30; i >= 0; i -= 2) {
+                    let bits = binaryString.substring(i, i + 2);
+
+                    // Determine if the current bits represent an actual flip
+                    if (bits !== "00" || actualFlipsFound) {
+                        actualFlipsFound = true; // Mark that we've found an actual flip
+                        switch(bits) {
+                            case "00":
+                                flips.push(1);
+                                break;
+                            case "01":
+                                flips.push(2);
+                                break;
+                            case "10":
+                                flips.push(3);
+                                break;
+                            case "11":
+                                flips.push(4);
+                                break;
+                        }
+                    }
+                }
+
+                // Construct the last ten flips string representation
+                let lastTenString = "Last Ten Flips:" + flips.map(flip => {
+                    switch (flip) {
+                        case 1: return " Tails/Lost";
+                        case 2: return " Tails/Won";
+                        case 3: return " Heads/Lost";
+                        case 4: return " Heads/Won";
+                        default: return "";
+                    }
+                }).join("");
+
+                console.log(lastTenString);
+                console.log("User stats for: " + userAddress);
+                console.log("Total flips won: " + userStats[1].toString());
+                console.log("Total flips lost: " + userStats[2].toString());
+                console.log("Total heads chosen: " + userStats[3].toString());
+                console.log("Total tails chosen: " + userStats[4].toString());
+                if (userStats[5] === 0) {
+                    console.log("Streak: 0");
+                } else if (userStats[5] >= 129) {
+                    console.log("Streak: win " + (Number(userStats[5]) - 128).toString());
+                } else {
+                    console.log("Streak: lose " + Number(userStats[5]).toString());
+                }
+            } catch (err) {
+                console.log("Error: ", err);
+            }
+        }
+    }
+    */
 
     async function connectWallet() {
         // @ts-ignore

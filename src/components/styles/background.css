@@ -101,13 +101,13 @@
 .cherry {
     width: 2.7vw;
     height: 2.7vw;
-    animation: grow 0.9s infinite alternate;
+    /*animation: grow 0.9s infinite alternate;*/
 }
 
 .cherry-mobile {
     width: 5.4vw;
     height: 5.4vw;
-    animation: grow-mobile 0.9s infinite alternate;
+    /*animation: grow-mobile 0.9s infinite alternate;*/
 }
 
 @keyframes grow {
