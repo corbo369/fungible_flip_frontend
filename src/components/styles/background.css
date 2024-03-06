@@ -77,7 +77,7 @@
     background-color: #FCFC03;
     border-radius: 50%;
     box-shadow: .1vw 0 1vw #ff9100;
-    animation: glow 1.2s infinite alternate;
+    /*animation: glow 1.2s infinite alternate;*/
 }
 
 .powerup-mobile {
@@ -86,7 +86,7 @@
     background-color: #FCFC03;
     border-radius: 50%;
     box-shadow: .1vw 0 1vw #ff9100;
-    animation: glow 1.2s infinite alternate;
+    /*animation: glow 1.2s infinite alternate;*/
 }
 
 @keyframes glow {

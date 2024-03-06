@@ -34,10 +34,14 @@ function App() {
         );
     } else {
         return (
-            <div className="App">
-                <Background/>
-                <FungibleFlip/>
-            </div>
+            <WagmiProvider config={config}>
+                <QueryClientProvider client={queryClient}>
+                    <div className="App">
+                        <Background/>
+                        <FungibleFlip/>
+                    </div>
+                </QueryClientProvider>
+            </WagmiProvider>
         );
     }
 }

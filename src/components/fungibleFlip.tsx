@@ -1,8 +1,7 @@
 import React, {useState} from 'react';
 import {ethers} from "ethers";
-import Alert from './alert';
 import { Howl } from 'howler';
-import axios from 'axios';
+import Alert from './alert';
 import flipABI from '../assets/FungibleFlip.json';
 import Mute from '../assets/images/mute.png';
 import Twitter from '../assets/images/twitter.png';
@@ -74,37 +73,16 @@ const FungibleFlip = () => {
 
     const [leaderboardText, setLeaderboardText] = useState<string>("leaderboard");
 
-    const chainID = 168587773;
+    const provider = new ethers.JsonRpcProvider(
+        'https://rpc.ankr.com/blast/647924a9aa98249697add40f8edd819ae04c3e97ef701d2e425617aff280850f');
 
-    const provider = new ethers.JsonRpcProvider('https://rpc.ankr.com/blast_testnet_sepolia/647924a9aa98249697add40f8edd819ae04c3e97ef701d2e425617aff280850f');
-
-    const contractAddress = "0xc7aEAca88cb6819a2fc7b46c667C5b0894ba245E";
+    const contractAddress = "0x31913Af6710E957Fd9C9C158907A443bFbA030A5";
 
     const contract = new ethers.Contract(contractAddress, flipABI.abi, provider);
 
     const isConnected = Boolean(userAddress);
 
-    const handleHeads = () => {
-        setChoice(1);
-        // @ts-ignore
-        document.getElementById("head").style.transform = "rotateY(0deg)";
-        // @ts-ignore
-        document.getElementById("tail").style.transform = "rotateY(180deg)";
-        setStage(0);
-    }
-
-    const handleTails = () => {
-        setChoice(0);
-        // @ts-ignore
-        document.getElementById("tail").style.transform = "rotateY(0deg)";
-        // @ts-ignore
-        document.getElementById("head").style.transform = "rotateY(180deg)";
-        setStage(0);
-    }
-
-    const handleNullInput = () => {
-        setStage(5);
-    }
+    const chainID = 81457;
 
     const getTextButton = () => {
         switch (stage) {
@@ -134,87 +112,31 @@ const FungibleFlip = () => {
         }
     };
 
+    const handleHeads = () => {
+        setChoice(1);
+        // @ts-ignore
+        document.getElementById("head").style.transform = "rotateY(0deg)";
+        // @ts-ignore
+        document.getElementById("tail").style.transform = "rotateY(180deg)";
+        setStage(0);
+    }
+
+    const handleTails = () => {
+        setChoice(0);
+        // @ts-ignore
+        document.getElementById("tail").style.transform = "rotateY(0deg)";
+        // @ts-ignore
+        document.getElementById("head").style.transform = "rotateY(180deg)";
+        setStage(0);
+    }
+
+    const handleNullInput = () => {
+        setStage(5);
+    }
+
     const handleAlertClose = () => {
         setShowChainAlert(false);
     };
-
-    /*
-    async function getStats() {
-        // @ts-ignore
-        if (window.ethereum) {
-            // @ts-ignore
-            const provider = new ethers.BrowserProvider(window.ethereum)
-            const signer = await provider.getSigner();
-            const contract = new ethers.Contract(
-                contractAddress,
-                flipABI.abi,
-                signer
-            );
-            try {
-                const userStats = await contract.stats(userAddress);
-
-                // Initialize an empty array to hold the decoded flips
-                let flips: number[] = [];
-
-                // Convert lastTen to a binary string, ensuring it's 32 characters long for all bits
-                let binaryString = BigInt(userStats[0]).toString(2).padStart(32, '0');
-
-                // New logic to ensure we only process actual flips
-                let actualFlipsFound = false;
-
-                for (let i = 30; i >= 0; i -= 2) {
-                    let bits = binaryString.substring(i, i + 2);
-
-                    // Determine if the current bits represent an actual flip
-                    if (bits !== "00" || actualFlipsFound) {
-                        actualFlipsFound = true; // Mark that we've found an actual flip
-                        switch(bits) {
-                            case "00":
-                                flips.push(1);
-                                break;
-                            case "01":
-                                flips.push(2);
-                                break;
-                            case "10":
-                                flips.push(3);
-                                break;
-                            case "11":
-                                flips.push(4);
-                                break;
-                        }
-                    }
-                }
-
-                // Construct the last ten flips string representation
-                let lastTenString = "Last Ten Flips:" + flips.map(flip => {
-                    switch (flip) {
-                        case 1: return " Tails/Lost";
-                        case 2: return " Tails/Won";
-                        case 3: return " Heads/Lost";
-                        case 4: return " Heads/Won";
-                        default: return "";
-                    }
-                }).join("");
-
-                console.log(lastTenString);
-                console.log("User stats for: " + userAddress);
-                console.log("Total flips won: " + userStats[1].toString());
-                console.log("Total flips lost: " + userStats[2].toString());
-                console.log("Total heads chosen: " + userStats[3].toString());
-                console.log("Total tails chosen: " + userStats[4].toString());
-                if (userStats[5] === 0) {
-                    console.log("Streak: 0");
-                } else if (userStats[5] >= 129) {
-                    console.log("Streak: win " + (Number(userStats[5]) - 128).toString());
-                } else {
-                    console.log("Streak: lose " + Number(userStats[5]).toString());
-                }
-            } catch (err) {
-                console.log("Error: ", err);
-            }
-        }
-    }
-    */
 
     async function connectWallet() {
         // @ts-ignore
@@ -225,7 +147,7 @@ const FungibleFlip = () => {
                     method: 'eth_requestAccounts',
                 });
                 setUserAddress(accounts[0]);
-                await locateStage(accounts[0]);
+                await updateLevel(accounts[0]);
             } catch (error) {
                 console.log('Error connecting...');
             }
@@ -234,47 +156,9 @@ const FungibleFlip = () => {
         }
     }
 
-    async function locateStage(address: string) {
-        // @ts-ignore
-        if (window.ethereum) {
-            // @ts-ignore
-            const provider = new ethers.BrowserProvider(window.ethereum)
-            const signer = await provider.getSigner();
-            const contract = new ethers.Contract(
-                contractAddress,
-                flipABI.abi,
-                signer
-            );
-            try {
-                await updateLevel(address);
-                const sequenceNumber = await contract.sequenceNumbers(address);
-                if (Number(sequenceNumber) === 0) {
-                    setStage(0);
-                }
-                else {
-                    const request = await contract.requests(sequenceNumber);
-                    setAmount(Number(ethers.formatEther(request[1])));
-                    setChoice(Number(request[4]));
-                    setStage(2);
-                }
-            } catch (err) {
-                setStage(0);
-                console.log("error: ", err);
-            }
-        }
-    }
-
     async function updateLevel(address: string) {
         // @ts-ignore
         if (window.ethereum) {
-            // @ts-ignore
-            const provider = new ethers.BrowserProvider(window.ethereum)
-            const signer = await provider.getSigner();
-            const contract = new ethers.Contract(
-                contractAddress,
-                flipABI.abi,
-                signer
-            );
             try {
                 const exp = await contract.experience(address);
                 const level = await contract.level(address);
@@ -289,6 +173,12 @@ const FungibleFlip = () => {
     async function handleDeposit() {
         // @ts-ignore
         if (window.ethereum) {
+            // @ts-ignore
+            document.getElementById("coin").style.animationIterationCount = "infinite";
+            // @ts-ignore
+            document.getElementById("coin").style.animationTimingFunction = "linear";
+            // @ts-ignore
+            document.getElementById("coin").style.animationPlayState = "running";
             setStage(1);
             // @ts-ignore
             const provider = new ethers.BrowserProvider(window.ethereum)
@@ -305,44 +195,57 @@ const FungibleFlip = () => {
                 return;
             }
             try {
-                const randomNumber = ethers.randomBytes(32);
-                const commitment = ethers.keccak256(randomNumber);
-                const result = await contract.deposit(randomNumber, commitment, choice, {value: ethers.parseEther(String(amount))});
+                const result = await contract.deposit(choice, {value: ethers.parseEther(String(amount))});
                 if(!muted) playSound('deposit');
-                await handleSubscribeDeposit();
+                await handleSubscribe();
                 console.log(result);
             } catch (err) {
+                // @ts-ignore
+                document.getElementById("coin").style.animationIterationCount = 1;
+                // @ts-ignore
+                document.getElementById("coin").style.animationPlayState = "paused";
                 setStage(0);
                 console.log("error: ", err);
             }
         }
     }
 
-    async function handleSubscribeDeposit() {
-
-        const eventFilter = contract.filters.Deposit(userAddress, null);
+    async function handleSubscribe() {
+        const depositFilter = contract.filters.Deposit(userAddress, null);
+        const resultFilter = contract.filters.Result(userAddress, null, null, null);
 
         try {
-            // @ts-ignore
-            document.getElementById("coin").style.animationIterationCount = "infinite";
-            // @ts-ignore
-            document.getElementById("coin").style.animationTimingFunction = "linear";
-            // @ts-ignore
-            document.getElementById("coin").style.animationPlayState = "running";
-
-            await contract.on(eventFilter, (event) => {
-                console.log('Event data:', event);
+            await contract.on(depositFilter, (event) => {
+                console.log('Deposit event detected', event);
+                if(!muted) playSound('background');
                 setTimeout(() => {
-                    if(!muted) playSound('background');
-                }, 9000);
+                    setStage(3);
+                    // @ts-ignore
+                    document.getElementById("coin").style.animationName = "flipping";
+                    // @ts-ignore
+                    document.getElementById("coin").style.animationTimingFunction = "linear";
+                    // @ts-ignore
+                    document.getElementById("coin").style.animationIterationCount = "infinite";
+                    // @ts-ignore
+                    document.getElementById("coin").style.animationPlayState = "running";
+                    if(!muted) playSound('flip');
+                }, 2700);
+                contract.off(depositFilter);
+            });
+            await contract.on(resultFilter, (event) => {
+                console.log('Result event detected', event);
                 setTimeout(() => {
-                    setStage(2);
                     // @ts-ignore
-                    document.getElementById("coin").style.animationIterationCount = 1;
+                    setFlipResult(Number(event.args[2]));
                     // @ts-ignore
-                    document.getElementById("coin").style.animationPlayState = "paused";
-                }, 12000);
-                contract.off(eventFilter);
+                    if (event.args[1] === event.args[2]) {
+                        if(!muted) playSound('win');
+                    } else {
+                        if(!muted) playSound('lose');
+                    }
+                    setStage(4);
+                }, 3000);
+                contract.off(resultFilter);
             });
         } catch (error) {
             // @ts-ignore
@@ -351,90 +254,6 @@ const FungibleFlip = () => {
             document.getElementById("coin").style.animationPlayState = "paused";
             setStage(0);
             console.log("error: ", error);
-        }
-    }
-
-    async function handleFlip() {
-        try {
-            // @ts-ignore
-            if (window.ethereum) {
-                setStage(3);
-                // @ts-ignore
-                const provider = new ethers.BrowserProvider(window.ethereum);
-                const signer = await provider.getSigner();
-                const contract = new ethers.Contract(
-                    contractAddress,
-                    flipABI.abi,
-                    signer
-                );
-                const network = await provider.getNetwork();
-                if (Number(network.chainId) !== chainID) {
-                    setShowChainAlert(true);
-                    setStage(2);
-                    return;
-                }
-                const sequence = await contract.sequenceNumbers(userAddress);
-                const sequenceNumber = Number(sequence);
-                const response = await axios.get('https://fungible-flip-aea2a3335ad7.herokuapp.com/api/getRevelation', {
-                    params: {
-                        sequenceNumber: sequence,
-                    },
-                });
-                const entropyCommitment = `0x${response.data.value.data}`;
-                const result = await contract.flip(sequenceNumber, entropyCommitment);
-                await handleSubscribeFlip();
-                await updateLevel(userAddress);
-                console.log(result);
-            }
-        } catch (err) {
-            // @ts-ignore
-            document.getElementById("coin").style.animationIterationCount = 1;
-            // @ts-ignore
-            document.getElementById("coin").style.animationPlayState = "paused";
-            setStage(2);
-            console.log("error: ", err);
-        }
-    }
-
-    async function handleSubscribeFlip() {
-
-        const eventFilter = contract.filters.Result(userAddress, null, null, null);
-
-        try {
-            // @ts-ignore
-            document.getElementById("coin").style.animationName = "flipping";
-            // @ts-ignore
-            document.getElementById("coin").style.animationTimingFunction = "linear";
-            // @ts-ignore
-            document.getElementById("coin").style.animationIterationCount = "infinite";
-            // @ts-ignore
-            document.getElementById("coin").style.animationPlayState = "running";
-
-            if(!muted) playSound('flip');
-
-            await contract.on(eventFilter, (event) => {
-                console.log('Event data:', event);
-
-                setFlipResult(Number(event.args[2]));
-
-                // @ts-ignore
-                document.getElementById("coin").style.animationIterationCount = 1;
-                // @ts-ignore
-                document.getElementById("coin").style.animationPlayState = "paused";
-
-                setStage(4);
-
-                if (event.args[1] === event.args[2]) {
-                    if(!muted) playSound('win');
-                } else {
-                    if(!muted) playSound('lose');
-                }
-
-                contract.off(eventFilter);
-            });
-        } catch (error) {
-            setStage(0);
-            console.error('Error subscribing to events:', error);
         }
     }
 
@@ -447,6 +266,7 @@ const FungibleFlip = () => {
         document.getElementById("coin").style.animationName = "spinning";
         // @ts-ignore
         document.getElementById("coin").style.animationTimingFunction = "linear";
+        await updateLevel(userAddress);
         setStage(0);
     }
 
@@ -485,7 +305,7 @@ const FungibleFlip = () => {
                 </div>
             </div>
             {showChainAlert && (
-                <Alert message="Please switch to the Blast Sepolia network" type="error" onClose={handleAlertClose} />
+                <Alert message="Please switch to the Blast network" type="error" onClose={handleAlertClose} />
             )}
             {stage === 4 ? (
                 <div className="main">
@@ -582,6 +402,24 @@ const FungibleFlip = () => {
                             </div>
                             <div className="amounts">
                                 <button
+                                    className={`amount-btn ${amount === 0.015 ? "amount-btn-selected" : ""}`}
+                                    onClick={() => {
+                                        setAmount(0.015);
+                                        setStage(0);
+                                    }}
+                                >
+                                    0.015
+                                </button>
+                                <button
+                                    className={`amount-btn ${amount === 0.02 ? "amount-btn-selected" : ""}`}
+                                    onClick={() => {
+                                        setAmount(0.02);
+                                        setStage(0);
+                                    }}
+                                >
+                                    0.02
+                                </button>
+                                <button
                                     className={`amount-btn ${amount === 0.025 ? "amount-btn-selected" : ""}`}
                                     onClick={() => {
                                         setAmount(0.025);
@@ -590,32 +428,14 @@ const FungibleFlip = () => {
                                 >
                                     0.025
                                 </button>
-                                <button
-                                    className={`amount-btn ${amount === 0.05 ? "amount-btn-selected" : ""}`}
-                                    onClick={() => {
-                                        setAmount(0.05);
-                                        setStage(0);
-                                    }}
-                                >
-                                    0.05
-                                </button>
-                                <button
-                                    className={`amount-btn ${amount === 0.1 ? "amount-btn-selected" : ""}`}
-                                    onClick={() => {
-                                        setAmount(0.1);
-                                        setStage(0);
-                                    }}
-                                >
-                                    0.1
-                                </button>
                             </div>
                         </div>
                     ) }
                     {isConnected ? (
                         stage === 2 ? (
-                            <button className="flip-btn" onClick={handleFlip}> {getTextButton()} </button>
+                            <button className="flip-btn"> {getTextButton()} </button>
                         ) : (
-                            <button className="flip-btn" onClick={(choice > 1 || amount === 0) ? handleNullInput : handleDeposit}> {getTextButton()} </button>
+                            <button className="flip-btn" onClick={(stage === 1 || stage === 3) ? () => {} : (choice > 1 || amount === 0) ? handleNullInput : handleDeposit}> {getTextButton()} </button>
                         )
                     ) : (
                         <button className="flip-btn" onClick={connectWallet}> CONNECT WALLET </button>

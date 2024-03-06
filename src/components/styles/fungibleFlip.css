@@ -335,8 +335,33 @@
     opacity: 100%;
 }
 
+.alert-mobile {
+    position: absolute;
+    overflow: hidden;
+    top: 60vh;
+    left: 17vw;
+    z-index: 9999;
+    height: 12vh;
+    width: 66vw;
+    font-family: PressStart2P, serif;
+    font-size: 3.9vw;
+    color: white;
+    text-shadow: .18vh .18vh black;
+    background-color: #490eab;
+    border: solid .33vh black;
+    opacity: 100%;
+}
+
 .progress-bar {
     height: .45vw;
+    background-color: #721c24;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.progress-bar-mobile {
+    height: 1.2vw;
     background-color: #721c24;
     position: absolute;
     top: 0;
