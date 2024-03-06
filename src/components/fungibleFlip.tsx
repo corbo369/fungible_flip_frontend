@@ -76,7 +76,7 @@ const FungibleFlip = () => {
     const provider = new ethers.JsonRpcProvider(
         'https://rpc.ankr.com/blast/647924a9aa98249697add40f8edd819ae04c3e97ef701d2e425617aff280850f');
 
-    const contractAddress = "0x31913Af6710E957Fd9C9C158907A443bFbA030A5";
+    const contractAddress = "0xbB0980E63A05FdFC165A915c4F8183299326f86a";
 
     const contract = new ethers.Contract(contractAddress, flipABI.abi, provider);
 
