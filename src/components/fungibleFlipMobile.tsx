@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {ethers} from "ethers";
 import { useWatchContractEvent } from 'wagmi'
 import { Howl } from 'howler';
-import Alert from './alertMobile';
+import Alert from './alert';
 import axios from 'axios';
 import flipABI from '../assets/FungibleFlip.json';
 import Mute from '../assets/images/mute.png';
@@ -75,147 +75,11 @@ const FungibleFlipMobile = () => {
 
     const [showChainAlert, setShowChainAlert] = useState(false);
 
-    const contractAddress = "0x0";
+    const contractAddress = "0xFa3f02eCd284ff05453b218BB76d1e3dbed5c151";
 
     const isConnected = Boolean(userAddress);
 
     const chainID = 81457;
-
-    /*
-    const contractInterface = new ethers.Interface(flipABI.abi);
-
-    useWatchContractEvent({
-        address: contractAddress,
-        abi: flipABI.abi,
-        args: [userAddress],
-        eventName: 'Deposit',
-        onLogs: (logs) => {
-            console.log('Deposit event!', logs);
-            if(!muted) playSound('background');
-            setTimeout(() => {
-                setStage(3);
-                // @ts-ignore
-                document.getElementById("coin").style.animationName = "flipping";
-                // @ts-ignore
-                document.getElementById("coin").style.animationTimingFunction = "linear";
-                // @ts-ignore
-                document.getElementById("coin").style.animationIterationCount = "infinite";
-                // @ts-ignore
-                document.getElementById("coin").style.animationPlayState = "running";
-                if(!muted) playSound('flip');
-            }, 3000);
-        },
-    });
-
-    useWatchContractEvent({
-        address: contractAddress,
-        abi: flipABI.abi,
-        args: [userAddress],
-        eventName: 'Result',
-        onLogs: (logs) => {
-            console.log('Result event!', logs);
-            setTimeout(() => {
-                const parsedLog = contractInterface.parseLog(logs[0]);
-                // @ts-ignore
-                setFlipResult(Number(parsedLog.args[2]));
-                // @ts-ignore
-                if(parsedLog.args[1] === parsedLog.args[2]) {
-                    if (!muted) playSound('win');
-                } else {
-                    if (!muted) playSound('lose');
-                }
-                setStage(4);
-            }, 6000);
-        },
-    });
-
-    useWatchContractEvent({
-        address: contractAddress,
-        abi: flipABI.abi,
-        eventName: '',
-        onLogs: (logs) => {
-            console.log('New logs for event!', logs);
-        },
-    });
-    */
-
-    /*
-async function getStats() {
-    // @ts-ignore
-    if (window.ethereum) {
-        // @ts-ignore
-        const provider = new ethers.BrowserProvider(window.ethereum)
-        const signer = await provider.getSigner();
-        const contract = new ethers.Contract(
-            contractAddress,
-            flipABI.abi,
-            signer
-        );
-        try {
-            const userStats = await contract.stats(userAddress);
-
-            // Initialize an empty array to hold the decoded flips
-            let flips: number[] = [];
-
-            // Convert lastTen to a binary string, ensuring it's 32 characters long for all bits
-            let binaryString = BigInt(userStats[0]).toString(2).padStart(32, '0');
-
-            // New logic to ensure we only process actual flips
-            let actualFlipsFound = false;
-
-            for (let i = 30; i >= 0; i -= 2) {
-                let bits = binaryString.substring(i, i + 2);
-
-                // Determine if the current bits represent an actual flip
-                if (bits !== "00" || actualFlipsFound) {
-                    actualFlipsFound = true; // Mark that we've found an actual flip
-                    switch(bits) {
-                        case "00":
-                            flips.push(1);
-                            break;
-                        case "01":
-                            flips.push(2);
-                            break;
-                        case "10":
-                            flips.push(3);
-                            break;
-                        case "11":
-                            flips.push(4);
-                            break;
-                    }
-                }
-            }
-
-            // Construct the last ten flips string representation
-            let lastTenString = "Last Ten Flips:" + flips.map(flip => {
-                switch (flip) {
-                    case 1: return " Tails/Lost";
-                    case 2: return " Tails/Won";
-                    case 3: return " Heads/Lost";
-                    case 4: return " Heads/Won";
-                    default: return "";
-                }
-            }).join("");
-
-            console.log(lastTenString);
-            console.log("User stats for: " + userAddress);
-            console.log("Total flips won: " + userStats[1].toString());
-            console.log("Total flips lost: " + userStats[2].toString());
-            console.log("Total heads chosen: " + userStats[3].toString());
-            console.log("Total tails chosen: " + userStats[4].toString());
-            if (userStats[5] === 0) {
-                console.log("Streak: 0");
-            } else if (userStats[5] >= 129) {
-                console.log("Streak: win " + (Number(userStats[5]) - 128).toString());
-            } else {
-                console.log("Streak: lose " + Number(userStats[5]).toString());
-            }
-        } catch (err) {
-            console.log("Error: ", err);
-        }
-    }
-}
-*/
 
     const handleHeads = () => {
         setChoice(1);
@@ -280,8 +144,16 @@ async function getStats() {
         eventName: 'Deposit',
         onLogs: (logs) => {
             console.log('New logs!', logs);
-            setStage(2);
-            handleFlip();
+            setTimeout( () => {
+                if(!muted) playSound('background');
+            }, 9000)
+            setTimeout(() => {
+                setStage(2);
+                // @ts-ignore
+                document.getElementById("coin").style.animationIterationCount = 1;
+                // @ts-ignore
+                document.getElementById("coin").style.animationPlayState = "paused";
+            }, 12000);
         },
     });
 
@@ -306,26 +178,20 @@ async function getStats() {
     });
 
     async function connectWallet() {
-        if (userAddress === "") {
-            setShowChainAlert(true);
-            return;
-        }
-        else {
-            // @ts-ignore
-            if (window.ethereum && window.ethereum.isMetaMask) {
-                try {
-                    // @ts-ignore
-                    const accounts = await window.ethereum.request({
-                        method: 'eth_requestAccounts',
-                    });
-                    setUserAddress(accounts[0]);
-                    await locateStage(accounts[0]);
-                } catch (error) {
-                    console.log('Error connecting...');
-                }
-            } else {
-                alert('MetaMask not detected');
+        // @ts-ignore
+        if (window.ethereum && window.ethereum.isMetaMask) {
+            try {
+                // @ts-ignore
+                const accounts = await window.ethereum.request({
+                    method: 'eth_requestAccounts',
+                });
+                setUserAddress(accounts[0]);
+                await locateStage(accounts[0]);
+            } catch (error) {
+                console.log('Error connecting...');
             }
+        } else {
+            alert('MetaMask not detected');
         }
     }
 
@@ -423,7 +289,14 @@ async function getStats() {
             // @ts-ignore
             if (window.ethereum) {
                 setStage(3);
-
+                // @ts-ignore
+                document.getElementById("coin").style.animationName = "flipping-mobile";
+                // @ts-ignore
+                document.getElementById("coin").style.animationTimingFunction = "linear";
+                // @ts-ignore
+                document.getElementById("coin").style.animationIterationCount = "infinite";
+                // @ts-ignore
+                document.getElementById("coin").style.animationPlayState = "running";
                 // @ts-ignore
                 const provider = new ethers.BrowserProvider(window.ethereum);
                 const signer = await provider.getSigner();
@@ -438,57 +311,16 @@ async function getStats() {
                     setStage(2);
                     return;
                 }
-                // @ts-ignore
-                const delay = ms => new Promise(res => setTimeout(res, ms));
-
-                // Wait for 12 seconds before the first API call
-                await delay(12000);
-
-                let response;
-                let success = false;
-
+                if(!muted) playSound('flip');
                 const sequence = await contract.sequenceNumbers(userAddress);
                 const sequenceNumber = Number(sequence);
-
-                // Function to make the API call with retry logic
-                const makeApiCall = async () => {
-                    while (!success) {
-                        try {
-                            response = await axios.get('https://fungible-flip-aea2a3335ad7.herokuapp.com/api/getRevelation', {
-                                params: { sequenceNumber: sequence },
-                            });
-                            console.log(response);
-                            if (response && response.data && response.data.value && response.data.value.data) {
-                                if(!muted) playSound('background');
-                                success = true; // Exit the loop if call is successful
-                            } else {
-                                // Wait for 3 seconds before retrying
-                                await delay(3000);
-                            }
-                        } catch (error) {
-                            console.error('API call failed, retrying...', error);
-                            // Wait for 3 seconds before retrying
-                            await delay(3000);
-                        }
-                    }
-                };
-
-                // Make the API call with retry logic
-                await makeApiCall();
-
-                // @ts-ignore
+                const response = await axios.get('https://fungible-flip-aea2a3335ad7.herokuapp.com/api/getRevelation', {
+                    params: {
+                        sequenceNumber: sequence,
+                    },
+                });
                 const entropyCommitment = `0x${response.data.value.data}`;
                 const result = await contract.flip(sequenceNumber, entropyCommitment);
-                if(!muted) playSound('flip');
-                // @ts-ignore
-                document.getElementById("coin").style.animationName = "flipping-mobile";
-                // @ts-ignore
-                document.getElementById("coin").style.animationTimingFunction = "linear";
-                // @ts-ignore
-                document.getElementById("coin").style.animationIterationCount = "infinite";
-                // @ts-ignore
-                document.getElementById("coin").style.animationPlayState = "running";
-                await updateLevel(userAddress);
                 console.log(result);
             }
         } catch (err) {
@@ -515,7 +347,7 @@ async function getStats() {
     return (
         <div className="flip">
             {showChainAlert && (
-                <Alert message="Mobile Support Coming Soon" type="error" onClose={handleAlertClose} />
+                <Alert message="Please switch to the Blast Sepolia network" type="error" onClose={handleAlertClose} />
             )}
             <p className="title-mobile">FUNGIBLE FLIP</p>
             <div className="middle-container-mobile">
@@ -641,24 +473,6 @@ async function getStats() {
                             </div>
                             <div className="amounts-mobile">
                                 <button
-                                    className={`amount-btn-mobile ${amount === 0.015 ? "amount-btn-mobile-selected" : ""}`}
-                                    onClick={() => {
-                                        setAmount(0.015);
-                                        setStage(0);
-                                    }}
-                                >
-                                    0.015
-                                </button>
-                                <button
-                                    className={`amount-btn-mobile ${amount === 0.02 ? "amount-btn-mobile-selected" : ""}`}
-                                    onClick={() => {
-                                        setAmount(0.02);
-                                        setStage(0);
-                                    }}
-                                >
-                                    0.02
-                                </button>
-                                <button
                                     className={`amount-btn-mobile ${amount === 0.025 ? "amount-btn-mobile-selected" : ""}`}
                                     onClick={() => {
                                         setAmount(0.025);
@@ -667,6 +481,24 @@ async function getStats() {
                                 >
                                     0.025
                                 </button>
+                                <button
+                                    className={`amount-btn-mobile ${amount === 0.05 ? "amount-btn-mobile-selected" : ""}`}
+                                    onClick={() => {
+                                        setAmount(0.05);
+                                        setStage(0);
+                                    }}
+                                >
+                                    0.05
+                                </button>
+                                <button
+                                    className={`amount-btn-mobile ${amount === 0.1 ? "amount-btn-mobile-selected" : ""}`}
+                                    onClick={() => {
+                                        setAmount(0.1);
+                                        setStage(0);
+                                    }}
+                                >
+                                    0.1
+                                </button>
                             </div>
                         </div>
                     ) }
@@ -674,7 +506,7 @@ async function getStats() {
                         stage === 2 ? (
                             <button className="flip-btn-mobile" onClick={handleFlip}> {getTextButton()} </button>
                         ) : (
-                            <button className="flip-btn-mobile" onClick={(stage === 1 || stage === 3) ? () => {} : (choice > 1 || amount === 0) ? handleNullInput : handleDeposit}> {getTextButton()} </button>
+                            <button className="flip-btn-mobile" onClick={(choice > 1 || amount === 0) ? handleNullInput : handleDeposit}> {getTextButton()} </button>
                         )
                     ) : (
                         <button className="flip-btn-mobile" onClick={connectWallet}> CONNECT WALLET </button>
