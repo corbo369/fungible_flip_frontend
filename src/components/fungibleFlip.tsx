@@ -74,11 +74,11 @@ const FungibleFlip = () => {
 
     const [leaderboardText, setLeaderboardText] = useState<string>("leaderboard");
 
-    const chainID = 81457;
+    const chainID = 168587773;
 
-    const provider = new ethers.JsonRpcProvider('https://rpc.ankr.com/blast/647924a9aa98249697add40f8edd819ae04c3e97ef701d2e425617aff280850f');
+    const provider = new ethers.JsonRpcProvider('https://rpc.ankr.com/blast_testnet_sepolia/647924a9aa98249697add40f8edd819ae04c3e97ef701d2e425617aff280850f');
 
-    const contractAddress = "0xFa3f02eCd284ff05453b218BB76d1e3dbed5c151";
+    const contractAddress = "0x7f03cB79551BD307675eE06C3775929d81d9f7dD";
 
     const contract = new ethers.Contract(contractAddress, flipABI.abi, provider);
 
@@ -308,11 +308,11 @@ const FungibleFlip = () => {
                             if (response && response.data && response.data.value && response.data.value.data) {
                                 success = true; // Exit the loop if call is successful
                             } else {
-                                await delay(3000);
+                                await delay(6000);
                             }
                         } catch (error) {
                             console.error('API call failed, retrying...', error);
-                            await delay(3000);
+                            await delay(1000);
                         }
                     }
                 };
